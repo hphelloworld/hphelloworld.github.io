@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Markdown," />
 
 
 
@@ -84,15 +84,22 @@
 
 
 
-<meta name="description" content="所见 所学 所得">
-<meta property="og:type" content="website">
-<meta property="og:title" content="HUANGPAN">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta name="description" content="此处提供了Markdown的简单概念，并提供了一些范例，并且每个范例都会提供输出的HTML结果。
+其实直接试试看也是一个很不错的方法， Dingus 是一个网页应用程序，你可以把自已编写的 Markdown 文档转成 XHTML。
+段落、标题、区块代码一个段落是由一个以上的连接的行句组成，而一个以上的空行则会划分出不同的段落（空行的定义是显示上看起来像是空行，就被视为空行，例如有一行只有空白和 t">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Markdown:Basics（快速入门）">
+<meta property="og:url" content="http://yoursite.com/2016/09/25/markdown/index.html">
 <meta property="og:site_name" content="HUANGPAN">
-<meta property="og:description" content="所见 所学 所得">
+<meta property="og:description" content="此处提供了Markdown的简单概念，并提供了一些范例，并且每个范例都会提供输出的HTML结果。
+其实直接试试看也是一个很不错的方法， Dingus 是一个网页应用程序，你可以把自已编写的 Markdown 文档转成 XHTML。
+段落、标题、区块代码一个段落是由一个以上的连接的行句组成，而一个以上的空行则会划分出不同的段落（空行的定义是显示上看起来像是空行，就被视为空行，例如有一行只有空白和 t">
+<meta property="og:updated_time" content="2016-10-03T13:55:50.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="HUANGPAN">
-<meta name="twitter:description" content="所见 所学 所得">
+<meta name="twitter:title" content="Markdown:Basics（快速入门）">
+<meta name="twitter:description" content="此处提供了Markdown的简单概念，并提供了一些范例，并且每个范例都会提供输出的HTML结果。
+其实直接试试看也是一个很不错的方法， Dingus 是一个网页应用程序，你可以把自已编写的 Markdown 文档转成 XHTML。
+段落、标题、区块代码一个段落是由一个以上的连接的行句组成，而一个以上的空行则会划分出不同的段落（空行的定义是显示上看起来像是空行，就被视为空行，例如有一行只有空白和 t">
 
 
 
@@ -113,9 +120,9 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/"/>
+  <link rel="canonical" href="http://yoursite.com/2016/09/25/markdown/"/>
 
-  <title> HUANGPAN </title>
+  <title> Markdown:Basics（快速入门） | HUANGPAN </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -136,9 +143,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left 
-   page-home 
- ">
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -215,214 +220,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-tags " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/10/02/hexo/" itemprop="url">
-                  Hexo发布部署指令
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-10-02T21:29:09+08:00" content="2016-10-02">
-              2016-10-02
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/10/02/hexo/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/02/hexo/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="指令"><a href="#指令" class="headerlink" title="指令"></a>指令</h1><h2 id="init"><a href="#init" class="headerlink" title="init"></a>init</h2><pre><code>$ hexo init [folder]
-</code></pre><p>新建一个网站。如果没有设置 folder ，Hexo 默认在目前的文件夹建立网站。</p>
-<h2 id="new"><a href="#new" class="headerlink" title="new"></a>new</h2><pre><code>$ hexo new [layout] &lt;title&gt;
-</code></pre><p>新建一篇文章。如果没有设置 layout 的话，默认使用 _config.yml 中的 default_layout 参数代替。如果标题包含空格的话，请使用引号括起来。</p>
-<h2 id="generate"><a href="#generate" class="headerlink" title="generate"></a>generate</h2><pre><code>$ hexo generate
-</code></pre><p>生成静态文件。</p>
-<table>
-<thead>
-<tr>
-<th>选项</th>
-<th style="text-align:center">描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>-d, –deploy</td>
-<td style="text-align:center">文件生成后立即部署网站</td>
-</tr>
-<tr>
-<td>-w, –watch</td>
-<td style="text-align:center">监视文件变动</td>
-</tr>
-</tbody>
-</table>
-<h2 id="publish"><a href="#publish" class="headerlink" title="publish"></a>publish</h2><pre><code>$ hexo publish [layout] &lt;filename&gt;
-</code></pre><p>发表草稿。</p>
-<h2 id="server"><a href="#server" class="headerlink" title="server"></a>server</h2><pre><code>$ hexo server
-</code></pre><p>启动服务器。默认情况下，访问网址为： <a href="http://localhost:4000/。" target="_blank" rel="external">http://localhost:4000/。</a></p>
-<table>
-<thead>
-<tr>
-<th>选项</th>
-<th style="text-align:center">描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>-p, –port</td>
-<td style="text-align:center">重设端口</td>
-</tr>
-<tr>
-<td>-s, –static</td>
-<td style="text-align:center">只使用静态文件</td>
-</tr>
-<tr>
-<td>-l, –log</td>
-<td style="text-align:center">启动日记记录，使用覆盖记录格式</td>
-</tr>
-</tbody>
-</table>
-<h2 id="deploy"><a href="#deploy" class="headerlink" title="deploy"></a>deploy</h2><pre><code>$ hexo deploy
-</code></pre><p>部署网站。</p>
-<table>
-<thead>
-<tr>
-<th>参数</th>
-<th style="text-align:center">描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>-g, –generate</td>
-<td style="text-align:center">部署之前预先生成静态文件</td>
-</tr>
-</tbody>
-</table>
-<h2 id="render"><a href="#render" class="headerlink" title="render"></a>render</h2><pre><code>$ hexo render &lt;file1&gt; [file2] ...
-</code></pre><p>渲染文件。</p>
-<table>
-<thead>
-<tr>
-<th>参数</th>
-<th style="text-align:center">描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>-o, –output</td>
-<td style="text-align:center">设置输出路径</td>
-</tr>
-</tbody>
-</table>
-<h2 id="migrate"><a href="#migrate" class="headerlink" title="migrate"></a>migrate</h2><pre><code>$ hexo migrate &lt;type&gt;
-</code></pre><p>从其他博客系统迁移内容。</p>
-<h2 id="clean"><a href="#clean" class="headerlink" title="clean"></a>clean</h2><pre><code>$ hexo clean
-</code></pre><p>清除缓存文件 (db.json) 和已生成的静态文件 (public)。</p>
-<h2 id="list"><a href="#list" class="headerlink" title="list"></a>list</h2><pre><code>$ hexo list &lt;type&gt;
-</code></pre><p>列出网站资料。</p>
-<p>##version</p>
-<pre><code>$ hexo version
-</code></pre><p>显示 Hexo 版本。</p>
-<h2 id="选项"><a href="#选项" class="headerlink" title="选项"></a>选项</h2><h3 id="安全模式"><a href="#安全模式" class="headerlink" title="安全模式"></a>安全模式</h3><pre><code>$ hexo --safe
-</code></pre><p>在安全模式下，不会载入插件和脚本。当您在安装新插件遭遇问题时，可以尝试以安全模式重新执行。</p>
-<h3 id="调试模式"><a href="#调试模式" class="headerlink" title="调试模式"></a>调试模式</h3><pre><code>$ hexo --debug
-</code></pre><p>在终端中显示调试信息并记录到 debug.log。当您碰到问题时，可以尝试用调试模式重新执行一次，并 提交调试信息到 GitHub。</p>
-<h3 id="简洁模式"><a href="#简洁模式" class="headerlink" title="简洁模式"></a>简洁模式</h3><pre><code>$ hexo --silent
-</code></pre><p>隐藏终端信息。</p>
-<p>###自定义配置文件的路径</p>
-<pre><code>$ hexo --config custom.yml
-</code></pre><p>自定义配置文件的路径，执行后将不再使用 _config.yml。</p>
-<h3 id="显示草稿"><a href="#显示草稿" class="headerlink" title="显示草稿"></a>显示草稿</h3><pre><code>$ hexo --draft
-</code></pre><p>显示 source/_drafts 文件夹中的草稿文章。</p>
-<h3 id="自定义-CWD"><a href="#自定义-CWD" class="headerlink" title="自定义 CWD"></a>自定义 CWD</h3><pre><code>$ hexo --cwd /path/to/cwd
-</code></pre><p>自定义当前工作目录（Current working directory）的路径。</p>
-<p>以上即为一些基本常用的指令，如需了解更详细的指令，可访问<a href="https://hexo.io/zh-cn/" target="_blank" rel="external">hexo官网</a>查看详细的API文档</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
 
   
   
@@ -442,10 +242,7 @@
             
             
               
-                
-                <a class="post-title-link" href="/2016/09/25/markdown/" itemprop="url">
-                  Markdown:Basics（快速入门）
-                </a>
+                Markdown:Basics（快速入门）
               
             
           </h1>
@@ -492,9 +289,7 @@
       
 
       
-        
-          
-            <p>此处提供了Markdown的简单概念，并提供了一些范例，并且每个范例都会提供输出的HTML结果。</p>
+        <p>此处提供了Markdown的简单概念，并提供了一些范例，并且每个范例都会提供输出的HTML结果。</p>
 <p>其实直接试试看也是一个很不错的方法， Dingus 是一个网页应用程序，你可以把自已编写的 Markdown 文档转成 XHTML。</p>
 <h2 id="段落、标题、区块代码"><a href="#段落、标题、区块代码" class="headerlink" title="段落、标题、区块代码"></a>段落、标题、区块代码</h2><p>一个段落是由一个以上的连接的行句组成，而一个以上的空行则会划分出不同的段落（空行的定义是显示上看起来像是空行，就被视为空行，例如有一行只有空白和 tab，那该行也会被视为空行），一般的段落不需要用空白或换行缩进。</p>
 <p>Markdown 支持两种标题的语法，Setext 和 atx 形式。Setext 形式是用底线的形式，利用 = （最高阶标题）和 - （第二阶标题），Atx 形式在行首插入 1 到 6 个 # ，对应到标题 1 到 6 阶。</p>
@@ -650,36 +445,59 @@ you&apos;ve got to put paragraph tags in your blockquotes:&lt;/p&gt;
 &lt;/code&gt;&lt;/pre&gt;
 </code></pre><p>以上即为一些基本的入门技巧，若有进一步的需求可参考<a href="http://www.appinn.com/markdown/index.html" target="_blank" rel="external">详细的文档</a></p>
 
-          
+      
+    </div>
+
+    <div>
+      
         
+
       
     </div>
 
     <div>
       
-    </div>
+        
 
-    <div>
       
     </div>
 
     <footer class="post-footer">
       
-
+        <div class="post-tags">
+          
+            <a href="/tags/Markdown/" rel="tag">#Markdown</a>
+          
+        </div>
       
 
       
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/10/02/hexo/" rel="prev" title="Hexo发布部署指令">
+                Hexo发布部署指令 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
       
-        <div class="post-eof"></div>
+
+      
       
     </footer>
   </article>
 
 
-    
-  </section>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -687,6 +505,14 @@ you&apos;ve got to put paragraph tags in your blockquotes:&lt;/p&gt;
 
 
           
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/09/25/markdown/"
+           data-title="Markdown:Basics（快速入门）" data-url="http://yoursite.com/2016/09/25/markdown/">
+      </div>
+    
+  </div>
+
 
         </div>
         
@@ -706,8 +532,17 @@ you&apos;ve got to put paragraph tags in your blockquotes:&lt;/p&gt;
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel  sidebar-panel-active ">
+      <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.jpg"
@@ -750,6 +585,17 @@ you&apos;ve got to put paragraph tags in your blockquotes:&lt;/p&gt;
 
       </section>
 
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#段落、标题、区块代码"><span class="nav-number">1.</span> <span class="nav-text">段落、标题、区块代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#修辞和强调"><span class="nav-number">2.</span> <span class="nav-text">修辞和强调</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#列表"><span class="nav-number">3.</span> <span class="nav-text">列表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#链接"><span class="nav-number">4.</span> <span class="nav-text">链接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#图片"><span class="nav-number">5.</span> <span class="nav-text">图片</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码"><span class="nav-number">6.</span> <span class="nav-text">代码</span></a></li></ol></div>
+            
+          </div>
+        </section>
       
 
     </div>
@@ -849,6 +695,10 @@ you&apos;ve got to put paragraph tags in your blockquotes:&lt;/p&gt;
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
 
   
 
