@@ -238,6 +238,160 @@
             
               
                 
+                <a class="post-title-link" href="/2016/10/06/angular/" itemprop="url">
+                  Angular的学习之路总结
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-10-06T22:52:00+08:00" content="2016-10-06">
+              2016-10-06
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/10/06/angular/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/06/angular/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><em>说在前面：本文主要是记录一些自己在学习angular时碰到的一些问题，踩过的一些坑，以及一些对应的解决方法的总结和归纳，目前也还处于学习起步的阶段，边学边记，不定期更新和总结，若有错误不足也欢迎指正和补充。</em>😊</p>
+<p>由于本人学习Angular是依靠书籍来的（不喜欢看视频，主要是懒的去找），目前在读的是动物书《用AngularJs开发下一代Web应用》，当然在目前前端框架日益繁多，更新也比较频繁，书籍自然是有点跟不上脚步了，不过看书主要是为了打基础（当然也是踩坑的痛苦过程）。本书怎样网上也自有评价，本人不必多言，以下就是一些遇到的问题和总结。</p>
+<p>此书因出版时间问题，里面angular的版本还是1.0.4，目前已经1.5了，而我也用的是最新的版本，所以难免会遇到一些方法不可用或者不一致的情况，这些去网上查一下基本可以解决，不必细究，先说说里面在路由控制上面踩的第一坑。</p>
+<p>以前只知道路由是由后台服务端来控制的，在知道angular里面也有路由控制后心想有点底，应该不是很难吧！果然就遇到问题了，先说第一个，由于angular的版本原因，路由控制ngRoute在1.2.0版本以后就被独立出来了，如有需要就必须单独引入其js。以下是官网在运行报错给出的解释。</p>
+<p><img src="/img/QQ20161006-1.png" alt="img"></p>
+<p>版本问题的报错暂且不说，再来说说路由规则，在书中有一个邮箱的例子，类似收件箱列表的效果，点击其中一条，通过路由跳转到指定的详情页去。以下是index.ejs（我用的是node express框架搭建的本地服务器）的代码：<br><em>index.ejs</em></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"wrap"</span> <span class="attr">ng-app</span>=<span class="string">"app"</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">div</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">h1</span>&gt;</span>邮箱<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">div</span> <span class="attr">ng-view</span>&gt;</span></div><div class="line">		<span class="tag">&lt;/<span class="name">div</span>&gt;</span>	</div><div class="line">	<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
+<p><em>list.ejs</em></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">table</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">tr</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">th</span>&gt;</span>Sender<span class="tag">&lt;/<span class="name">th</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">th</span>&gt;</span>Subject<span class="tag">&lt;/<span class="name">th</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">th</span>&gt;</span>Date<span class="tag">&lt;/<span class="name">th</span>&gt;</span></div><div class="line">	<span class="tag">&lt;/<span class="name">tr</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">tr</span> <span class="attr">ng-repeat</span>=<span class="string">"message in messages"</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">td</span>&gt;</span>&#123;&#123;message.sender&#125;&#125;<span class="tag">&lt;/<span class="name">td</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">td</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"#&#123;&#123;message.id&#125;&#125;"</span>&gt;</span>&#123;&#123;message.subject&#125;&#125;<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">td</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">td</span>&gt;</span>&#123;&#123;message.date&#125;&#125;<span class="tag">&lt;/<span class="name">td</span>&gt;</span></div><div class="line">	<span class="tag">&lt;/<span class="name">tr</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">table</span>&gt;</span></div></pre></td></tr></table></figure>
+<p><em>detail.ejs</em></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">strong</span>&gt;</span>Subject:<span class="tag">&lt;/<span class="name">strong</span>&gt;</span></div><div class="line">	&#123;&#123;message.subject&#125;&#125;</div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">strong</span>&gt;</span>Sender:<span class="tag">&lt;/<span class="name">strong</span>&gt;</span></div><div class="line">	&#123;&#123;message.sender&#125;&#125;</div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">strong</span>&gt;</span>Date<span class="tag">&lt;/<span class="name">strong</span>&gt;</span></div><div class="line">	&#123;&#123;message.date&#125;&#125;</div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">strong</span>&gt;</span>To:<span class="tag">&lt;/<span class="name">strong</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">span</span> <span class="attr">ng-repeat</span>=<span class="string">"recipient in message.recipients"</span>&gt;</span>&#123;&#123;recipient&#125;&#125;<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span></div><div class="line">	&#123;&#123;message.message&#125;&#125;</div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"#/"</span>&gt;</span>Back to message list<span class="tag">&lt;/<span class="name">a</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>注：其中必要的js已经引入，比如angular和angular-route.js。</p>
+<p>其原理主要是通过index中的ng-view来展示视图，list为列表，detail为详情。</p>
+<p>以下为主要js：</p>
+<pre><code class="js"><span class="keyword">var</span> myapp = angular.module(<span class="string">'app'</span>, [<span class="string">'ngRoute'</span>]);
+<span class="comment">// 编写路由规则</span>
+myapp.config([<span class="string">'$routeProvider'</span>,<span class="function"><span class="keyword">function</span>(<span class="params">$routeProvider</span>)</span>{
+    $routeProvider.
+    when(<span class="string">'/'</span>,{
+        <span class="attr">templateUrl</span>: <span class="string">'/list'</span>,
+        <span class="attr">controller</span>: <span class="string">'listcontroller'</span>
+
+    }).
+    when(<span class="string">'/:id'</span>,{
+        <span class="attr">templateUrl</span>: <span class="string">'/detail'</span>,
+        <span class="attr">controller</span>: <span class="string">'detailcontroller'</span>
+    }).
+    otherwise({
+        <span class="attr">redirectTo</span>: <span class="string">'/'</span>
+    });
+}]);
+
+<span class="comment">// 邮件信息</span>
+messages=[{
+    <span class="attr">id</span>:<span class="number">0</span>,<span class="attr">sender</span>:<span class="string">'123456@sina.com'</span>,<span class="attr">subject</span>: <span class="string">'你好啊！'</span>,<span class="attr">date</span>:<span class="string">'2016-09-09 12:30:08'</span>,<span class="attr">recipients</span>: [<span class="string">'42323@qq.com'</span>],<span class="attr">message</span>: <span class="string">"你好这是一封邮件的内容，请注意查收0"</span>
+},{
+    <span class="attr">id</span>:<span class="number">1</span>,<span class="attr">sender</span>:<span class="string">'545456@sina.com'</span>,<span class="attr">subject</span>: <span class="string">'你好啊！呵呵'</span>,<span class="attr">date</span>:<span class="string">'2016-09-20 11:30:08'</span>,<span class="attr">recipients</span>: [<span class="string">'6677723@qq.com'</span>],<span class="attr">message</span>: <span class="string">"你好这是一封邮件的内容，请注意查收1"</span>
+},{
+    <span class="attr">id</span>:<span class="number">2</span>,<span class="attr">sender</span>:<span class="string">'98989456@sina.com'</span>,<span class="attr">subject</span>: <span class="string">'你好啊！呵呵呵'</span>,<span class="attr">date</span>:<span class="string">'2016-10-10 21:30:08'</span>,<span class="attr">recipients</span>: [<span class="string">'112723@qq.com'</span>],<span class="attr">message</span>: <span class="string">"你好这是一封邮件的内容，请注意查收2"</span>
+}];
+
+<span class="comment">// 绑定控制器</span>
+myapp.controller(<span class="string">"listcontroller"</span>,<span class="function"><span class="keyword">function</span>(<span class="params">$scope</span>)</span>{
+    $scope.messages=messages;
+})
+myapp.controller(<span class="string">"detailcontroller"</span>,<span class="function"><span class="keyword">function</span>(<span class="params">$scope,$routeParams</span>)</span>{
+    $scope.message=messages[$routeParams.id];
+})
+</code></pre>
+<p>当然这些代码和书中的代码还是有些改动的转，主要是为了适应新版本的写法。在前面也说了，由于本人是在node express上面搭建的本地环境，所以在angular控制路由时始终会报错，“未找到相应的请求页面”，在搜索无果后，心想可能是express也控制了路由，导致页面没有找到。于是在服务器端对应的写了list和detail下的路由后，页面也能正常运行访问，以下是运行的结果：</p>
+<p><img src="/img/QQ20161006-2.png" alt="img"></p>
+<p>点击第二个时跳转的页面如图：</p>
+<p><img src="/img/QQ20161006-3.png" alt="img"></p>
+<p>这也是在本书中遇到的第一个坑，总结下就是，在用angular控制路由时，服务器端应该事先写好对应的路由，否则前端始终都会出错无法正常运行。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/10/04/express/" itemprop="url">
                   Express安装入门简介
                 </a>
@@ -894,7 +1048,7 @@ you&apos;ve got to put paragraph tags in your blockquotes:
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-count">4</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -904,7 +1058,7 @@ you&apos;ve got to put paragraph tags in your blockquotes:
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-count">5</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
