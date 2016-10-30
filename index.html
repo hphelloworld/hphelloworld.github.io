@@ -238,6 +238,218 @@
             
               
                 
+                <a class="post-title-link" href="/2016/10/30/placeholder/" itemprop="url">
+                  对不支持input的placeholder属性的解决方法
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-10-30T16:40:22+08:00" content="2016-10-30">
+              2016-10-30
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/10/30/placeholder/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/30/placeholder/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>在表单输入域中有一个很好的提示属性‘placeholder’，此属性可以为该输入框显示一些提示信息，方便用户输入，但也并不是所有浏览器都支持此属性，在ie10以下，以及其他更低版本的浏览器中，此属性就会被忽略掉，这对于用户体验是很不友好的。在此提供了一个解决方法，大体思路是在不支持的浏览器上，创建一个输入框，并赋值‘placeholder’，输入框失去焦点时，显示此输入框，获取焦点时，显示真实的输入框。具体代码如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">placeholder</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> isplaceholder = <span class="string">'placeholder'</span> <span class="keyword">in</span> <span class="built_in">document</span>.createElement(<span class="string">'input'</span>);</div><div class="line">	<span class="keyword">if</span> (!isplaceholder) &#123;</div><div class="line">		$(<span class="string">'input,textarea'</span>).each(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">			<span class="keyword">var</span> input = $(<span class="keyword">this</span>);</div><div class="line">			<span class="keyword">if</span> (input.attr(<span class="string">'type'</span>) == <span class="string">'password'</span>) &#123; </div><div class="line">			<span class="comment">//使其支持password类型input，其样式请都写在class或者id里，避免布局样式错乱</span></div><div class="line">				<span class="keyword">var</span> input_text = $(<span class="string">'&lt;input type="text"&gt;'</span>);</div><div class="line">				input_text.attr(<span class="string">'class'</span>, input.attr(<span class="string">'class'</span>));</div><div class="line">				input_text.attr(<span class="string">'id'</span>, input.attr(<span class="string">'id'</span>));</div><div class="line">				input_text.val(input.attr(<span class="string">'placeholder'</span>));</div><div class="line">				input.after(input_text).hide();</div><div class="line">				input_text.focus(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">					<span class="keyword">if</span> (input_text.val() == input.attr(<span class="string">'placeholder'</span>)) &#123;</div><div class="line">						input.val(<span class="string">''</span>).show();</div><div class="line">						setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;input.focus()&#125;,<span class="number">10</span>)</div><div class="line">					&#125; <span class="keyword">else</span> &#123;</div><div class="line">						input.val(input_text.val()).show();</div><div class="line">						setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;input.focus()&#125;,<span class="number">10</span>)</div><div class="line">					&#125;</div><div class="line">					input_text.hide();</div><div class="line">				&#125;)</div><div class="line">				input.blur(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">					<span class="keyword">if</span> (input.val() == <span class="string">''</span>) &#123;</div><div class="line">						input_text.val(input.attr(<span class="string">'placeholder'</span>)).show();</div><div class="line">						input.hide();</div><div class="line">					&#125;</div><div class="line">				&#125;);</div><div class="line">			&#125; <span class="keyword">else</span> &#123;</div><div class="line">				input.val(input.attr(<span class="string">'placeholder'</span>) ? input.attr(<span class="string">'placeholder'</span>) : input.val());</div><div class="line">				input.on(<span class="string">"focus"</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">					<span class="keyword">if</span> (input.val() == input.attr(<span class="string">'placeholder'</span>)) &#123;</div><div class="line">						input.val(<span class="string">''</span>);</div><div class="line">						input.removeClass(<span class="string">'placeholder'</span>);</div><div class="line">					&#125;</div><div class="line">				&#125;)</div><div class="line">				input.on(<span class="string">"blur"</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">					<span class="keyword">var</span> input = $(<span class="keyword">this</span>);</div><div class="line">					<span class="keyword">if</span> (input.val() == <span class="string">''</span> || input.val() == input.attr(<span class="string">'placeholder'</span>)) &#123;</div><div class="line">						input.addClass(<span class="string">'placeholder'</span>);</div><div class="line">						input.val(input.attr(<span class="string">'placeholder'</span>));</div><div class="line">					&#125;</div><div class="line">				&#125;);</div><div class="line">			&#125;</div><div class="line">		&#125;)</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>此方法依赖于jq，并且对’password‘类型的密码输入框也支持（网上流传的均对密码类型的输入域不支持）。</p>
+<p>注：此方法虽能解决在低版本浏览器中‘placeholder’不支持的问题，但也同时需要注意若此表单带有表单验证（如：Vaildform）等插件时，需在检测表单值时对比该标签的‘placholder’，若相等则不给予验证通过，否则可能造成用户未输入值而导致表单验证通过的问题。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/10/29/mui/" itemprop="url">
+                  DCloud框架开发移动web项目
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-10-29T18:11:00+08:00" content="2016-10-29">
+              2016-10-29
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/10/29/mui/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/29/mui/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>最近在使用dcloud的mui框架开发移动web项目中，遇到的一些问题总结一下。</p>
+<p>注：由于mui框架本身是为webapp设计的，并不是很适用于移动web项目。所以在用此框架开发移动web项目时有部分地方需要注意一下。</p>
+<h2 id="a链接的跳转问题"><a href="#a链接的跳转问题" class="headerlink" title="a链接的跳转问题"></a>a链接的跳转问题</h2><p>在mui框架中，由于是主要为webapp设计的，在webapp中链接跳转显然是不合理的，对于用户体验也非常不好，其在webapp中实现的方式均是通过webview的创建切换来实现的，这样的过场切换就不会有空白页傻傻的让用户等待，故其在a标签的href属性中的默认点击事件就被取消掉了，结果导致放在移动web项目中，页面之间通过a链接跳转的方法也就随之失效了。</p>
+<p>在了解了其中的原因后，本以为可以通过重写链接跳转的方法就可以解决问题，如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">mui(<span class="string">'body'</span>).on(<span class="string">'tap'</span>,<span class="string">'a'</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	<span class="built_in">window</span>.location.href=<span class="keyword">this</span>.href;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>但是这只能解决部分问题，在遇到需要有tab切换的页面时，在mui框架中有对应的模板，其实现的方式也是通过a链接href属性绑定需要显示div的id，若按照上面的方法去写，此功能就会失效，而封装好的切换模板若改变其href值也会失效，于是将上面的方法改写了一下。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">mui(<span class="string">'body'</span>).on(<span class="string">'tap'</span>,<span class="string">'a'</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	<span class="built_in">window</span>.location.href=<span class="keyword">this</span>.getattribute(<span class="string">'data-href'</span>);</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>通过为a标签添加一个‘data-href’属性来代替‘href’的功能来实现链接的跳转，也不会影响到框架封装好了的功能。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/10/06/angular/" itemprop="url">
                   Angular的学习之路总结
                 </a>
@@ -1048,7 +1260,7 @@ you&apos;ve got to put paragraph tags in your blockquotes:
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">4</span>
+              <span class="site-state-item-count">6</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1058,7 +1270,7 @@ you&apos;ve got to put paragraph tags in your blockquotes:
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-count">8</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
