@@ -238,6 +238,114 @@
             
               
                 
+                <a class="post-title-link" href="/2016/11/27/canvas/" itemprop="url">
+                  关于canvas中物体运动动画的一些总结
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-11-27T17:38:37+08:00" content="2016-11-27">
+              2016-11-27
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/11/27/canvas/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/11/27/canvas/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>目前在学习一些有关canvas的知识，以下是一点关于canvas中物体运动动画的一些小的总结（运动，碰撞，反弹）等；</p>
+<h1 id="HTML"><a href="#HTML" class="headerlink" title="HTML"></a>HTML</h1><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"wrap"</span> &gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"container-fluid"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">canvas</span> <span class="attr">id</span>=<span class="string">"canvas"</span> <span class="attr">width</span>=<span class="string">'500'</span> <span class="attr">height</span>=<span class="string">'500'</span>&gt;</span><span class="tag">&lt;/<span class="name">canvas</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"btn_div"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"btn btn-success start"</span> &gt;</span>start<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"btn btn-danger stop"</span> &gt;</span>stop<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>主要是一个画布元素canvas和两个按钮（开始和暂停）；</p>
+<h1 id="CSS"><a href="#CSS" class="headerlink" title="CSS"></a>CSS</h1><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.btn_div</span>&#123;</div><div class="line">	<span class="attribute">position</span>: absolute;</div><div class="line">	<span class="attribute">bottom</span>: <span class="number">20px</span>;</div><div class="line">	<span class="attribute">left</span>: <span class="number">20px</span>;</div><div class="line">&#125;</div><div class="line"><span class="selector-tag">canvas</span>&#123;</div><div class="line">	<span class="attribute">display</span>: block;</div><div class="line">	<span class="attribute">background</span>: <span class="number">#012</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>将按钮进行定位于左下角。</p>
+<h1 id="JS"><a href="#JS" class="headerlink" title="JS"></a>JS</h1><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div></pre></td><td class="code"><pre><div class="line">$(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	<span class="keyword">var</span> canvas=$(<span class="string">'#canvas'</span>);</div><div class="line">	<span class="keyword">var</span> context=canvas.get(<span class="number">0</span>).getContext(<span class="string">'2d'</span>);</div><div class="line">	<span class="keyword">var</span> pi=<span class="built_in">Math</span>.PI;</div><div class="line">	<span class="keyword">var</span> canvas_w=canvas.width();</div><div class="line">	<span class="keyword">var</span> canvas_h=canvas.height();</div><div class="line">	<span class="keyword">var</span> play_ani=<span class="literal">true</span>;</div><div class="line">	<span class="keyword">var</span> start=$(<span class="string">".start"</span>);</div><div class="line">	<span class="keyword">var</span> stop=$(<span class="string">".stop"</span>);</div><div class="line">	start.hide();</div><div class="line">	<span class="comment">// 开始动画</span></div><div class="line">	start.on(<span class="string">'click'</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	    $(<span class="keyword">this</span>).hide();</div><div class="line">	    stop.show();</div><div class="line">	    play_ani=<span class="literal">true</span>;</div><div class="line">	    animate();</div><div class="line">	&#125;);</div><div class="line">	<span class="comment">// 暂停动画</span></div><div class="line">	stop.on(<span class="string">'click'</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	    $(<span class="keyword">this</span>).hide();</div><div class="line">	    start.show();</div><div class="line">	    play_ani=<span class="literal">false</span>;</div><div class="line">	&#125;)</div><div class="line">	<span class="comment">// 画布随窗体大小进行改变</span></div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">resize_canvas</span>(<span class="params"></span>)</span>&#123;</div><div class="line">		canvas.attr(<span class="string">'width'</span>,$(<span class="built_in">window</span>).width());</div><div class="line">		canvas.attr(<span class="string">'height'</span>,$(<span class="built_in">window</span>).height());</div><div class="line">		canvas_w=canvas.width();</div><div class="line">		canvas_h=canvas.height();</div><div class="line">	&#125;</div><div class="line">	resize_canvas();</div><div class="line">	$(<span class="built_in">window</span>).resize(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">		resize_canvas();</div><div class="line">	&#125;)</div><div class="line"></div><div class="line">	<span class="keyword">var</span> aste=<span class="function"><span class="keyword">function</span>(<span class="params">x,y,r,m,vx,vy,ax,ay</span>)</span>&#123;</div><div class="line">		<span class="comment">// 球体属性声明</span></div><div class="line">		<span class="comment">// x为起始横坐标</span></div><div class="line">		<span class="comment">// y为起始纵坐标</span></div><div class="line">		<span class="comment">// r为半径</span></div><div class="line">		<span class="comment">// m为质量</span></div><div class="line">		<span class="comment">// vx横轴运动速度</span></div><div class="line">		<span class="comment">// vy纵轴运动速度</span></div><div class="line">		<span class="comment">// ax横轴加速度</span></div><div class="line">		<span class="comment">// ay纵轴加速度</span></div><div class="line">	    <span class="keyword">this</span>.x=x;</div><div class="line">	    <span class="keyword">this</span>.y=y;</div><div class="line">	 	<span class="keyword">this</span>.r=r;</div><div class="line">	 	<span class="keyword">this</span>.m=m;</div><div class="line">	 	<span class="keyword">this</span>.vx=vx;</div><div class="line">	 	<span class="keyword">this</span>.vy=vy;</div><div class="line">	 	<span class="keyword">this</span>.ax=ax;</div><div class="line">	 	<span class="keyword">this</span>.ay=ay;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">var</span> astes=<span class="keyword">new</span> <span class="built_in">Array</span>();</div><div class="line">	<span class="comment">// 循环初始化10个小球</span></div><div class="line">	<span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++)&#123;</div><div class="line">	    <span class="keyword">var</span> x=<span class="number">20</span>+(<span class="built_in">Math</span>.random()*(canvas_w<span class="number">-40</span>));</div><div class="line">	    <span class="keyword">var</span> y=<span class="number">20</span>+(<span class="built_in">Math</span>.random()*(canvas_h<span class="number">-40</span>));</div><div class="line">	    <span class="keyword">var</span> r=<span class="number">5</span>+<span class="built_in">Math</span>.random()*<span class="number">10</span>;</div><div class="line">	    <span class="keyword">var</span> m=r/<span class="number">2</span>;</div><div class="line">	    <span class="keyword">var</span> vx=<span class="built_in">Math</span>.random()*<span class="number">4</span><span class="number">-2</span>;</div><div class="line">	    <span class="keyword">var</span> vy=<span class="built_in">Math</span>.random()*<span class="number">4</span><span class="number">-2</span>;</div><div class="line">	    <span class="keyword">var</span> ax=<span class="built_in">Math</span>.random()*<span class="number">0.2</span><span class="number">-0.1</span>;</div><div class="line">	    <span class="keyword">var</span> ay=<span class="built_in">Math</span>.random()*<span class="number">0.2</span><span class="number">-0.1</span>;</div><div class="line">	    astes.push(<span class="keyword">new</span> aste(x,y,r,m,vx,vy,ax,ay));</div><div class="line">	&#125;</div><div class="line">	<span class="comment">// 小球运动动画</span></div><div class="line">	<span class="function"><span class="keyword">function</span> <span class="title">animate</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	    context.clearRect(<span class="number">0</span>,<span class="number">0</span>,canvas_w,canvas_h);</div><div class="line">	    context.fillStyle=<span class="string">"#fff"</span>;</div><div class="line">	    <span class="keyword">var</span> astes_l=astes.length;</div><div class="line">	    <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;astes_l;i++)&#123;</div><div class="line">	        <span class="keyword">var</span> aste=astes[i];</div><div class="line">	        <span class="comment">// 检测是否碰撞</span></div><div class="line">	        <span class="keyword">for</span>(<span class="keyword">var</span> j=i+<span class="number">1</span>;j&lt;astes_l;j++)&#123;</div><div class="line">	        	<span class="keyword">var</span> aste_b=astes[j];</div><div class="line">	        	<span class="keyword">var</span> dx=aste_b.x-aste.x;</div><div class="line">	        	<span class="keyword">var</span> dy=aste_b.y-aste.y;</div><div class="line">	        	<span class="keyword">var</span> distance=<span class="built_in">Math</span>.sqrt((dx*dx)+(dy*dy));</div><div class="line">	        	<span class="comment">// 通过计算两个原之间的半径只和来判断是否碰撞</span></div><div class="line">	        	<span class="keyword">if</span>(distance&lt;aste.r+aste_b.r)&#123;</div><div class="line">	        		<span class="keyword">var</span> angle=<span class="built_in">Math</span>.atan2(dy,dx);</div><div class="line">	        		<span class="keyword">var</span> sin=<span class="built_in">Math</span>.sin(angle);</div><div class="line">	        		<span class="keyword">var</span> cos=<span class="built_in">Math</span>.cos(angle);</div><div class="line">	        		<span class="keyword">var</span> x=<span class="number">0</span>;</div><div class="line">	        		<span class="keyword">var</span> y=<span class="number">0</span>;</div><div class="line">	        		<span class="keyword">var</span> xb=dx*cos+dy*sin;</div><div class="line">	        		<span class="keyword">var</span> yb=dy*cos-dx*sin;</div><div class="line">	        		<span class="keyword">var</span> vx=aste.vx*cos+aste.vy*sin;</div><div class="line">	        		<span class="keyword">var</span> vy=aste.vy*cos-aste.vx*sin;</div><div class="line">	        		<span class="keyword">var</span> vxb=aste_b.vx*cos+aste_b.vy*sin;</div><div class="line">	        		<span class="keyword">var</span> vyb=aste_b.vy*cos-aste_b.vx*sin;</div><div class="line">	        		<span class="comment">// 依靠动量守恒来反转速度</span></div><div class="line">	        		<span class="keyword">var</span> vt=vx-vxb;</div><div class="line">	        		vx=((aste.m-aste_b.m)*vx+<span class="number">2</span>*aste_b.m*vxb)/(aste.m+aste_b.m);</div><div class="line">	        		vxb=vt+vx;</div><div class="line">	        		xb=x+(aste.r+aste_b.r);</div><div class="line">	        		aste.x=aste.x+(x*cos-y*sin);</div><div class="line">	        		aste.y=aste.y+(y*cos+x*sin);</div><div class="line">	        		aste_b.x=aste.x+(xb*cos-yb*sin);</div><div class="line">	        		aste_b.y=aste.y+(yb*cos+xb*sin);</div><div class="line">	        		aste.vx=vx*cos-vy*sin;</div><div class="line">	        		aste.vy=vy*cos+vx*sin;</div><div class="line">	        		aste_b.vx=vxb*cos-vyb*sin;</div><div class="line">	        		aste_b.vy=vyb*cos+vxb*sin;</div><div class="line">	        	&#125;</div><div class="line">	        &#125;</div><div class="line">	        aste.x+=aste.vx;</div><div class="line">	        aste.y+=aste.vy;</div><div class="line">	        <span class="keyword">if</span>(<span class="built_in">Math</span>.abs(aste.vx)&lt;<span class="number">10</span>)&#123;</div><div class="line">	        	aste.vx+=aste.ax;</div><div class="line">	        &#125;;</div><div class="line">	        <span class="keyword">if</span>(<span class="built_in">Math</span>.abs(aste.vy)&lt;<span class="number">10</span>)&#123;</div><div class="line">	        	aste.vy+=aste.ay;</div><div class="line">	        &#125;</div><div class="line">	        <span class="comment">// 判断是否触碰到边界线并进行反弹操作</span></div><div class="line">	        <span class="keyword">if</span>(aste.x-aste.r&lt;<span class="number">0</span>)&#123;</div><div class="line">	        	aste.x=aste.r;</div><div class="line">	        	aste.vx*=<span class="number">-1</span>;</div><div class="line">	        	aste.ax*=<span class="number">-1</span>;</div><div class="line">	        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(aste.x+aste.r&gt;canvas_w)&#123;</div><div class="line">	        	aste.x=canvas_w-aste.r;</div><div class="line">	        	aste.vx*=<span class="number">-1</span>;</div><div class="line">	        	aste.ax*=<span class="number">-1</span>;</div><div class="line">	        &#125;</div><div class="line">	        <span class="keyword">if</span>(aste.y-aste.r&lt;<span class="number">0</span>)&#123;</div><div class="line">	        	aste.y=aste.r;</div><div class="line">	        	aste.vy*=<span class="number">-1</span>;</div><div class="line">	        	aste.ay*=<span class="number">-1</span>;</div><div class="line">	        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(aste.y+aste.r&gt;canvas_h)&#123;</div><div class="line">	        	aste.y=canvas_h-aste.r;</div><div class="line">	        	aste.vy*=<span class="number">-1</span>;</div><div class="line">	        	aste.ay*=<span class="number">-1</span>;</div><div class="line">	        &#125;;</div><div class="line">	        <span class="comment">// 属性更新完毕，重新绘制小球</span></div><div class="line">			context.beginPath();</div><div class="line">			context.arc(aste.x,aste.y,aste.r,<span class="number">0</span>,pi*<span class="number">2</span>,<span class="literal">false</span>);</div><div class="line">			context.closePath();</div><div class="line">			context.fill();</div><div class="line">	    &#125;;</div><div class="line">	    <span class="keyword">if</span>(play_ani)&#123;</div><div class="line">	        setTimeout(animate,<span class="number">30</span>);</div><div class="line">	    &#125;</div><div class="line">	&#125;</div><div class="line">	animate();</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>js中主要是对于平常中物体运动需要的一些属性和动画的处理，感觉这些方法以后会用得到，先做个总结。</p>
+<p><em>注：需提前引入bootstrap和jquery等框架或库;</em></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/10/30/placeholder/" itemprop="url">
                   对不支持input的placeholder属性的解决方法
                 </a>
@@ -1250,7 +1358,7 @@ you&apos;ve got to put paragraph tags in your blockquotes:
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">6</span>
+              <span class="site-state-item-count">7</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
