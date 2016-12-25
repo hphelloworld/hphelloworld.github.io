@@ -1,0 +1,618 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Express,Node.js,Mysql," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="目前在学习有关node.js这方面的知识，在这里简单的使用express+mysql实现一个基本的登录注册功能。主要的逻辑也很简单，就三个页面一个index页面也就是登录页面，一个注册页面和一个登录后的首页，在未登录时，禁止访问登录后的首页，登录后禁止访问登录和注册页面。以下即为几个页面对应的代码块。
+登录页123456789101112131415161718192021222324252627">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Express+Mysql实现简单的登录注册功能">
+<meta property="og:url" content="https://hphelloworld.github.io/2016/12/25/login/index.html">
+<meta property="og:site_name" content="HUANGPAN">
+<meta property="og:description" content="目前在学习有关node.js这方面的知识，在这里简单的使用express+mysql实现一个基本的登录注册功能。主要的逻辑也很简单，就三个页面一个index页面也就是登录页面，一个注册页面和一个登录后的首页，在未登录时，禁止访问登录后的首页，登录后禁止访问登录和注册页面。以下即为几个页面对应的代码块。
+登录页123456789101112131415161718192021222324252627">
+<meta property="og:image" content="https://hphelloworld.github.io/img/20161225200708.jpeg">
+<meta property="og:updated_time" content="2016-12-25T12:27:39.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Express+Mysql实现简单的登录注册功能">
+<meta name="twitter:description" content="目前在学习有关node.js这方面的知识，在这里简单的使用express+mysql实现一个基本的登录注册功能。主要的逻辑也很简单，就三个页面一个index页面也就是登录页面，一个注册页面和一个登录后的首页，在未登录时，禁止访问登录后的首页，登录后禁止访问登录和注册页面。以下即为几个页面对应的代码块。
+登录页123456789101112131415161718192021222324252627">
+<meta name="twitter:image" content="https://hphelloworld.github.io/img/20161225200708.jpeg">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '作者'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="https://hphelloworld.github.io/2016/12/25/login/"/>
+
+  <title> Express+Mysql实现简单的登录注册功能 | HUANGPAN </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">HUANGPAN</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Express+Mysql实现简单的登录注册功能
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-12-25T19:05:30+08:00" content="2016-12-25">
+              2016-12-25
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/12/25/login/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/25/login/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>目前在学习有关node.js这方面的知识，在这里简单的使用express+mysql实现一个基本的登录注册功能。主要的逻辑也很简单，就三个页面一个index页面也就是登录页面，一个注册页面和一个登录后的首页，在未登录时，禁止访问登录后的首页，登录后禁止访问登录和注册页面。以下即为几个页面对应的代码块。</p>
+<h2 id="登录页"><a href="#登录页" class="headerlink" title="登录页"></a>登录页</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>登录<span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"X-UA-Compatible"</span> <span class="attr">content</span>=<span class="string">"chrome=1,IE=edge"</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1, maximum-scale=1"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> <span class="attr">type</span>=<span class="string">"text/css"</span> <span class="attr">href</span>=<span class="string">"/css/bootstrap.min.css"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span> <span class="attr">src</span>=<span class="string">"/js/jquery.min.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">style</span> <span class="attr">type</span>=<span class="string">"text/css"</span>&gt;</span><span class="css"></span></div><div class="line">		<span class="selector-tag">html</span>,<span class="selector-tag">body</span>&#123;</div><div class="line">			<span class="attribute">height</span>: <span class="number">100%</span>;</div><div class="line">		&#125;</div><div class="line">		<span class="selector-class">.login_div</span>&#123;</div><div class="line">			<span class="attribute">width</span>: <span class="number">500px</span>;</div><div class="line">			<span class="attribute">position</span>: relative;</div><div class="line">			<span class="attribute">top</span>: <span class="number">50%</span>;</div><div class="line">			<span class="attribute">-webkit-transform</span>: <span class="built_in">translateY</span>(-50%);</div><div class="line">			<span class="attribute">-ms-transform</span>: <span class="built_in">translateY</span>(-50%);</div><div class="line">			<span class="attribute">-o-transform</span>: <span class="built_in">translateY</span>(-50%);</div><div class="line">			<span class="attribute">transform</span>: <span class="built_in">translateY</span>(-50%);</div><div class="line">		&#125;</div><div class="line">		<span class="selector-class">.tips</span>&#123;</div><div class="line">			<span class="attribute">color</span>: <span class="number">#d9534f</span>;</div><div class="line">			<span class="attribute">display</span>: none;</div><div class="line">		&#125;</div><div class="line">    <span class="tag">&lt;/<span class="name">style</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"center-block login_div"</span> &gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">form</span> <span class="attr">class</span>=<span class="string">"form-horizontal"</span> <span class="attr">role</span>=<span class="string">"form"</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"form-group"</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">label</span>  <span class="attr">class</span>=<span class="string">"col-xs-4 control-label"</span>&gt;</span>手机号<span class="tag">&lt;/<span class="name">label</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"col-xs-8"</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">class</span>=<span class="string">"form-control"</span> <span class="attr">name</span>=<span class="string">'account'</span> <span class="attr">placeholder</span>=<span class="string">"手机号"</span>&gt;</span></div><div class="line">		<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">		<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"form-group"</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">label</span> <span class="attr">class</span>=<span class="string">"col-xs-4 control-label"</span>&gt;</span>密码<span class="tag">&lt;/<span class="name">label</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"col-xs-8"</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"password"</span> <span class="attr">class</span>=<span class="string">"form-control"</span> <span class="attr">name</span>=<span class="string">'password'</span> <span class="attr">placeholder</span>=<span class="string">"密码"</span>&gt;</span></div><div class="line">		<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">		<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"form-group"</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"col-xs-offset-4 col-xs-8"</span>&gt;</span></div><div class="line">				<span class="tag">&lt;<span class="name">button</span> <span class="attr">type</span>=<span class="string">"submit"</span> <span class="attr">class</span>=<span class="string">"btn btn-default"</span>&gt;</span>登录<span class="tag">&lt;/<span class="name">button</span>&gt;</span></div><div class="line">				<span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"register"</span> <span class="attr">class</span>=<span class="string">"btn"</span>&gt;</span>注册<span class="tag">&lt;/<span class="name">a</span>&gt;</span></div><div class="line">				<span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"tips"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line">			<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">		<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">	<span class="tag">&lt;/<span class="name">form</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span>&gt;</span><span class="javascript"></span></div><div class="line">$(<span class="string">"form"</span>).on(<span class="string">'submit'</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	<span class="keyword">var</span> m=<span class="regexp">/^13[0-9]&#123;9&#125;$|14[0-9]&#123;9&#125;|15[0-9]&#123;9&#125;$|17[0-9]&#123;9&#125;$|18[0-9]&#123;9&#125;$/</span>;</div><div class="line">	<span class="keyword">var</span> p=<span class="regexp">/^[\w\W]&#123;6,16&#125;$/</span>;</div><div class="line">	<span class="keyword">var</span> account=$(<span class="string">"input[name='account']"</span>).val();</div><div class="line">	<span class="keyword">var</span> password=$(<span class="string">"input[name='password']"</span>).val();</div><div class="line">	<span class="keyword">var</span> tips=$(<span class="string">".tips"</span>);</div><div class="line">	<span class="keyword">if</span>(account==<span class="string">''</span>)&#123;</div><div class="line">		tips.text(<span class="string">'请输入手机号'</span>).finish().fadeIn().delay(<span class="number">1000</span>).fadeOut();</div><div class="line">	&#125;<span class="keyword">else</span> <span class="keyword">if</span>(!m.test(account))&#123;</div><div class="line">		tips.text(<span class="string">'请输入正确的手机号'</span>).finish().fadeIn().delay(<span class="number">1000</span>).fadeOut();</div><div class="line">	&#125;<span class="keyword">else</span> <span class="keyword">if</span>(password==<span class="string">''</span>)&#123;</div><div class="line">		tips.text(<span class="string">'请输入密码'</span>).finish().fadeIn().delay(<span class="number">1000</span>).fadeOut();</div><div class="line">	&#125;<span class="keyword">else</span> <span class="keyword">if</span>(!p.test(password))&#123;</div><div class="line">		tips.text(<span class="string">'请输入6-16位任意字符的密码'</span>).finish().fadeIn().delay(<span class="number">1000</span>).fadeOut();</div><div class="line">	&#125;<span class="keyword">else</span> &#123;</div><div class="line">		<span class="keyword">var</span> form_data=$(<span class="keyword">this</span>).serializeArray();</div><div class="line">		$.ajax(&#123;</div><div class="line">			<span class="attr">url</span>: <span class="string">''</span>,</div><div class="line">			<span class="attr">type</span>: <span class="string">'post'</span>,</div><div class="line">			<span class="attr">data</span>: form_data,</div><div class="line">			<span class="attr">success</span>: <span class="function"><span class="keyword">function</span>(<span class="params">data</span>)</span>&#123;</div><div class="line">				<span class="keyword">if</span>(data.status==<span class="number">1</span>)&#123;</div><div class="line">					<span class="built_in">window</span>.location.href=data.href;</div><div class="line">				&#125;<span class="keyword">else</span>&#123;</div><div class="line">					tips.text(data.info).finish().fadeIn().delay(<span class="number">1000</span>).fadeOut();</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">		&#125;)</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">&#125;)</div><div class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>一个简单的登录窗口，登录时会做一点简单的验证然后使用ajax进行提交。</p>
+<h2 id="注册页"><a href="#注册页" class="headerlink" title="注册页"></a>注册页</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>注册<span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"X-UA-Compatible"</span> <span class="attr">content</span>=<span class="string">"chrome=1,IE=edge"</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1, maximum-scale=1"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> <span class="attr">type</span>=<span class="string">"text/css"</span> <span class="attr">href</span>=<span class="string">"/css/bootstrap.min.css"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span> <span class="attr">src</span>=<span class="string">"/js/jquery.min.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">style</span> <span class="attr">type</span>=<span class="string">"text/css"</span>&gt;</span><span class="css"></span></div><div class="line">		<span class="selector-tag">html</span>,<span class="selector-tag">body</span>&#123;</div><div class="line">			<span class="attribute">height</span>: <span class="number">100%</span>;</div><div class="line">		&#125;</div><div class="line">		<span class="selector-class">.login_div</span>&#123;</div><div class="line">			<span class="attribute">width</span>: <span class="number">500px</span>;</div><div class="line">			<span class="attribute">position</span>: relative;</div><div class="line">			<span class="attribute">top</span>: <span class="number">50%</span>;</div><div class="line">			<span class="attribute">-webkit-transform</span>: <span class="built_in">translateY</span>(-50%);</div><div class="line">			<span class="attribute">-ms-transform</span>: <span class="built_in">translateY</span>(-50%);</div><div class="line">			<span class="attribute">-o-transform</span>: <span class="built_in">translateY</span>(-50%);</div><div class="line">			<span class="attribute">transform</span>: <span class="built_in">translateY</span>(-50%);</div><div class="line">		&#125;</div><div class="line">		<span class="selector-class">.tips</span>&#123;</div><div class="line">			<span class="attribute">color</span>: <span class="number">#d9534f</span>;</div><div class="line">			<span class="attribute">display</span>: none;</div><div class="line">		&#125;</div><div class="line">    <span class="tag">&lt;/<span class="name">style</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"center-block login_div"</span> &gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">form</span> <span class="attr">class</span>=<span class="string">"form-horizontal"</span> <span class="attr">role</span>=<span class="string">"form"</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"form-group"</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">label</span>  <span class="attr">class</span>=<span class="string">"col-xs-4 control-label"</span>&gt;</span>手机号<span class="tag">&lt;/<span class="name">label</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"col-xs-8"</span>&gt;</span></div><div class="line">				<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">class</span>=<span class="string">"form-control"</span> <span class="attr">name</span>=<span class="string">'account'</span> <span class="attr">placeholder</span>=<span class="string">"手机号"</span>&gt;</span></div><div class="line">			<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">		<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"form-group"</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">label</span> <span class="attr">class</span>=<span class="string">"col-xs-4 control-label"</span>&gt;</span>密码<span class="tag">&lt;/<span class="name">label</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"col-xs-8"</span>&gt;</span></div><div class="line">				<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"password"</span> <span class="attr">class</span>=<span class="string">"form-control"</span> <span class="attr">name</span>=<span class="string">'password'</span> <span class="attr">placeholder</span>=<span class="string">"密码"</span>&gt;</span></div><div class="line">			<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">		<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"form-group"</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">label</span> <span class="attr">class</span>=<span class="string">"col-xs-4 control-label"</span>&gt;</span>确认密码<span class="tag">&lt;/<span class="name">label</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"col-xs-8"</span>&gt;</span></div><div class="line">				<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"password"</span> <span class="attr">class</span>=<span class="string">"form-control"</span> <span class="attr">name</span>=<span class="string">'password'</span> <span class="attr">placeholder</span>=<span class="string">"确认密码"</span>&gt;</span></div><div class="line">			<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">		<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"form-group"</span>&gt;</span></div><div class="line">			<span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"col-xs-offset-4 col-xs-8"</span>&gt;</span></div><div class="line">				<span class="tag">&lt;<span class="name">button</span> <span class="attr">type</span>=<span class="string">"submit"</span> <span class="attr">class</span>=<span class="string">"btn btn-default"</span>&gt;</span>注册<span class="tag">&lt;/<span class="name">button</span>&gt;</span></div><div class="line">				<span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"/"</span> <span class="attr">class</span>=<span class="string">"btn"</span>&gt;</span>去登录<span class="tag">&lt;/<span class="name">a</span>&gt;</span></div><div class="line">				<span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"tips"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line">			<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">		<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">	<span class="tag">&lt;/<span class="name">form</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span>&gt;</span><span class="javascript"></span></div><div class="line">$(<span class="string">"form"</span>).on(<span class="string">'submit'</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	<span class="keyword">var</span> form_data=$(<span class="keyword">this</span>).serializeArray(); </div><div class="line">	<span class="keyword">var</span> m=<span class="regexp">/^13[0-9]&#123;9&#125;$|14[0-9]&#123;9&#125;|15[0-9]&#123;9&#125;$|17[0-9]&#123;9&#125;$|18[0-9]&#123;9&#125;$/</span>;</div><div class="line">	<span class="keyword">var</span> p=<span class="regexp">/^[\w\W]&#123;6,16&#125;$/</span>;</div><div class="line">	<span class="keyword">var</span> account=$(<span class="string">"input[name='account']"</span>).val();</div><div class="line">	<span class="keyword">var</span> password=$(<span class="string">"input[name='password']"</span>).eq(<span class="number">0</span>).val();</div><div class="line">	<span class="keyword">var</span> re_password=$(<span class="string">"input[name='password']"</span>).eq(<span class="number">1</span>).val();</div><div class="line">	<span class="keyword">var</span> tips=$(<span class="string">".tips"</span>);</div><div class="line">	<span class="keyword">if</span>(account==<span class="string">''</span>)&#123;</div><div class="line">		tips.text(<span class="string">'请输入手机号'</span>).finish().fadeIn().delay(<span class="number">1000</span>).fadeOut();</div><div class="line">	&#125;<span class="keyword">else</span> <span class="keyword">if</span>(!m.test(account))&#123;</div><div class="line">		tips.text(<span class="string">'请输入正确的手机号'</span>).finish().fadeIn().delay(<span class="number">1000</span>).fadeOut();</div><div class="line">	&#125;<span class="keyword">else</span> <span class="keyword">if</span>(password==<span class="string">''</span>)&#123;</div><div class="line">		tips.text(<span class="string">'请输入密码'</span>).finish().fadeIn().delay(<span class="number">1000</span>).fadeOut();</div><div class="line">	&#125;<span class="keyword">else</span> <span class="keyword">if</span>(!p.test(password))&#123;</div><div class="line">		tips.text(<span class="string">'请输入6-16位任意字符的密码'</span>).finish().fadeIn().delay(<span class="number">1000</span>).fadeOut();</div><div class="line">	&#125;<span class="keyword">else</span> <span class="keyword">if</span>(re_password==<span class="string">''</span>)&#123;</div><div class="line">		tips.text(<span class="string">'请输入确认密码'</span>).finish().fadeIn().delay(<span class="number">1000</span>).fadeOut();</div><div class="line">	&#125;<span class="keyword">else</span> <span class="keyword">if</span>(!p.test(re_password))&#123;</div><div class="line">		tips.text(<span class="string">'请输入6-16位任意字符的密码'</span>).finish().fadeIn().delay(<span class="number">1000</span>).fadeOut();</div><div class="line">	&#125;<span class="keyword">else</span> <span class="keyword">if</span>(password!=re_password)&#123;	</div><div class="line">		tips.text(<span class="string">'两次输入的密码不一致！'</span>).finish().fadeIn().delay(<span class="number">1000</span>).fadeOut();</div><div class="line">	&#125;<span class="keyword">else</span>&#123;</div><div class="line">		$.ajax(&#123;</div><div class="line">			<span class="attr">url</span>: <span class="string">''</span>,</div><div class="line">			<span class="attr">type</span>: <span class="string">'post'</span>,</div><div class="line">			<span class="attr">data</span>: form_data,</div><div class="line">			<span class="attr">success</span>: <span class="function"><span class="keyword">function</span>(<span class="params">data</span>)</span>&#123;</div><div class="line">				<span class="keyword">if</span>(data.status==<span class="number">1</span>)&#123;</div><div class="line">					<span class="built_in">window</span>.location.href=data.href;</div><div class="line">				&#125;<span class="keyword">else</span>&#123;</div><div class="line">					tips.text(data.info).finish().fadeIn().delay(<span class="number">1000</span>).fadeOut();</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">		&#125;)</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">&#125;)</div><div class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>和登录页面差不多，只不过多了双重密码的校验规则。</p>
+<h2 id="登录后的首页"><a href="#登录后的首页" class="headerlink" title="登录后的首页"></a>登录后的首页</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>首页<span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"X-UA-Compatible"</span> <span class="attr">content</span>=<span class="string">"chrome=1,IE=edge"</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1, maximum-scale=1"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> <span class="attr">type</span>=<span class="string">"text/css"</span> <span class="attr">href</span>=<span class="string">"/css/bootstrap.min.css"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span> <span class="attr">src</span>=<span class="string">"/js/jquery.min.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">style</span> <span class="attr">type</span>=<span class="string">"text/css"</span>&gt;</span><span class="css"></span></div><div class="line">		<span class="selector-tag">html</span>,<span class="selector-tag">body</span>&#123;</div><div class="line">			<span class="attribute">height</span>: <span class="number">100%</span>;</div><div class="line">		&#125;</div><div class="line">		<span class="selector-class">.login_div</span>&#123;</div><div class="line">			<span class="attribute">width</span>: <span class="number">400px</span>;</div><div class="line">			<span class="attribute">position</span>: relative;</div><div class="line">			<span class="attribute">top</span>: <span class="number">50%</span>;</div><div class="line">			<span class="attribute">-webkit-transform</span>: <span class="built_in">translateY</span>(-50%);</div><div class="line">			<span class="attribute">-ms-transform</span>: <span class="built_in">translateY</span>(-50%);</div><div class="line">			<span class="attribute">-o-transform</span>: <span class="built_in">translateY</span>(-50%);</div><div class="line">			<span class="attribute">transform</span>: <span class="built_in">translateY</span>(-50%);</div><div class="line">		&#125;</div><div class="line">    <span class="tag">&lt;/<span class="name">style</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"center-block login_div text-center"</span> &gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">p</span>&gt;</span>欢迎你，<span class="tag">&lt;<span class="name">%-</span> <span class="attr">user</span> %&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"logout"</span> <span class="attr">class</span>=<span class="string">"btn btn-danger"</span>&gt;</span>退出<span class="tag">&lt;/<span class="name">a</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span>&gt;</span><span class="undefined"></span></div><div class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>一个简单的展示用户帐号的页面，以及一个退出按钮。</p>
+<p>接下来时数据库，目前选用的是mysql，建一个表名为‘user’，分别创建3个字段id，account，password。如下图：</p>
+<p><img src="/img/20161225200708.jpeg" alt="img"></p>
+<p>然后是后台路由的配置。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>);</div><div class="line"><span class="keyword">var</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</div><div class="line"><span class="keyword">var</span> favicon = <span class="built_in">require</span>(<span class="string">'serve-favicon'</span>);</div><div class="line"><span class="keyword">var</span> logger = <span class="built_in">require</span>(<span class="string">'morgan'</span>);</div><div class="line"><span class="keyword">var</span> cookieParser = <span class="built_in">require</span>(<span class="string">'cookie-parser'</span>);</div><div class="line"><span class="keyword">var</span> bodyParser = <span class="built_in">require</span>(<span class="string">'body-parser'</span>);</div><div class="line"><span class="keyword">var</span> session=<span class="built_in">require</span>(<span class="string">'express-session'</span>);</div><div class="line"></div><div class="line"><span class="keyword">var</span> routes = <span class="built_in">require</span>(<span class="string">'./routes/index'</span>);</div><div class="line"><span class="keyword">var</span> register = <span class="built_in">require</span>(<span class="string">'./routes/register'</span>);</div><div class="line"><span class="keyword">var</span> home = <span class="built_in">require</span>(<span class="string">'./routes/home'</span>);</div><div class="line"><span class="keyword">var</span> logout=<span class="built_in">require</span>(<span class="string">'./routes/logout'</span>);</div><div class="line"><span class="keyword">var</span> app = express();</div><div class="line"></div><div class="line"><span class="comment">// view engine setup</span></div><div class="line">app.set(<span class="string">'views'</span>, path.join(__dirname, <span class="string">'views'</span>));</div><div class="line">app.set(<span class="string">'view engine'</span>, <span class="string">'ejs'</span>);</div><div class="line"></div><div class="line"><span class="comment">// uncomment after placing your favicon in /public</span></div><div class="line"><span class="comment">//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));</span></div><div class="line">app.use(logger(<span class="string">'dev'</span>));</div><div class="line">app.use(bodyParser.json());</div><div class="line">app.use(bodyParser.urlencoded(&#123; <span class="attr">extended</span>: <span class="literal">false</span> &#125;));</div><div class="line">app.use(cookieParser());</div><div class="line">app.use(express.static(path.join(__dirname, <span class="string">'public'</span>)));</div><div class="line"><span class="comment">// 使用session</span></div><div class="line">app.use(session(&#123;<span class="attr">secret</span>: <span class="string">'secret'</span>,<span class="attr">cookie</span>:&#123;<span class="attr">maxAge</span>: <span class="number">1000</span>*<span class="number">60</span>*<span class="number">30</span>&#125;&#125;));</div><div class="line"></div><div class="line">app.use(<span class="string">'/'</span>, routes);</div><div class="line">app.use(<span class="string">'/register'</span>, register);</div><div class="line">app.use(<span class="string">'/home'</span>, home);</div><div class="line">app.use(<span class="string">'/logout'</span>, logout);</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">// catch 404 and forward to error handler</span></div><div class="line">app.use(<span class="function"><span class="keyword">function</span>(<span class="params">req, res, next</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> err = <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'Not Found'</span>);</div><div class="line">  err.status = <span class="number">404</span>;</div><div class="line">  next(err);</div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="comment">// error handlers</span></div><div class="line"></div><div class="line"><span class="comment">// development error handler</span></div><div class="line"><span class="comment">// will print stacktrace</span></div><div class="line"><span class="keyword">if</span> (app.get(<span class="string">'env'</span>) === <span class="string">'development'</span>) &#123;</div><div class="line">  app.use(<span class="function"><span class="keyword">function</span>(<span class="params">err, req, res, next</span>) </span>&#123;</div><div class="line">    res.status(err.status || <span class="number">500</span>);</div><div class="line">    res.render(<span class="string">'error'</span>, &#123;</div><div class="line">      <span class="attr">message</span>: err.message,</div><div class="line">      <span class="attr">error</span>: err</div><div class="line">    &#125;);</div><div class="line">  &#125;);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// production error handler</span></div><div class="line"><span class="comment">// no stacktraces leaked to user</span></div><div class="line">app.use(<span class="function"><span class="keyword">function</span>(<span class="params">err, req, res, next</span>) </span>&#123;</div><div class="line">  res.status(err.status || <span class="number">500</span>);</div><div class="line">  res.render(<span class="string">'error'</span>, &#123;</div><div class="line">    <span class="attr">message</span>: err.message,</div><div class="line">    <span class="attr">error</span>: &#123;&#125;</div><div class="line">  &#125;);</div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="built_in">module</span>.exports = app;</div></pre></td></tr></table></figure>
+<p>app.js中可以看到一个名为express-session的中间件，用这个主要是方面在浏览器端存储用户登录之后的session，这个需要提前先安装好。</p>
+<h2 id="登录路由"><a href="#登录路由" class="headerlink" title="登录路由"></a>登录路由</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>);</div><div class="line"><span class="keyword">var</span> mysql = <span class="built_in">require</span>(<span class="string">'mysql'</span>);</div><div class="line"><span class="keyword">var</span> $conf = <span class="built_in">require</span>(<span class="string">'../conf/mysql'</span>);</div><div class="line"><span class="keyword">var</span> router = express.Router();</div><div class="line"><span class="comment">// 创建mysql连接池</span></div><div class="line"><span class="keyword">var</span> pool=mysql.createPool($conf.mysql);</div><div class="line">router.get(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res, next</span>) </span>&#123;</div><div class="line">	<span class="comment">// 判断是否已登录</span></div><div class="line">	<span class="keyword">if</span>(req.session.user)&#123;</div><div class="line">		res.render(<span class="string">'home'</span>,&#123;<span class="attr">user</span>:req.session.user&#125;);</div><div class="line">	&#125;<span class="keyword">else</span>&#123;</div><div class="line">		res.render(<span class="string">'index'</span>);</div><div class="line">	&#125;</div><div class="line">&#125;);</div><div class="line">router.post(<span class="string">'/'</span>,<span class="function"><span class="keyword">function</span>(<span class="params">req,res</span>)</span>&#123;</div><div class="line">    <span class="comment">// post 用req.body获取参数</span></div><div class="line">	<span class="keyword">var</span> param =req.body;</div><div class="line">    <span class="keyword">var</span> m=<span class="regexp">/^13[0-9]&#123;9&#125;$|14[0-9]&#123;9&#125;|15[0-9]&#123;9&#125;$|17[0-9]&#123;9&#125;$|18[0-9]&#123;9&#125;$/</span>;</div><div class="line">    <span class="comment">// 获取登录表单数据</span></div><div class="line">    <span class="keyword">var</span> account=param.account;</div><div class="line">    <span class="keyword">var</span> password=param.password;</div><div class="line">    <span class="comment">// 账号（手机号）校验</span></div><div class="line">    <span class="keyword">if</span>(!m.test(account))&#123;</div><div class="line">        res.send(&#123;<span class="attr">status</span>: <span class="string">'0'</span>,<span class="attr">info</span>: <span class="string">'请输入正确的手机号'</span>&#125;);</div><div class="line">        <span class="keyword">return</span> </div><div class="line">    &#125;;</div><div class="line">    <span class="comment">// 符合登录规则，连接数据库</span></div><div class="line">	pool.getConnection(<span class="function"><span class="keyword">function</span>(<span class="params">err,connection</span>)</span>&#123;</div><div class="line">		<span class="keyword">if</span>(err)&#123;</div><div class="line">            res.send(&#123;<span class="attr">status</span>: <span class="string">'0'</span>,<span class="attr">info</span>: <span class="string">'登录失败'</span>&#125;);</div><div class="line">		&#125;<span class="keyword">else</span>&#123;</div><div class="line">			<span class="comment">// 查询登录账号</span></div><div class="line">            connection.query(<span class="string">'SELECT * FROM user WHERE account = ? '</span>,(account),<span class="function"><span class="keyword">function</span>(<span class="params">err,result</span>)</span>&#123;</div><div class="line">                <span class="keyword">if</span>(err)&#123;</div><div class="line">                    res.send(&#123;<span class="attr">status</span>: <span class="string">'0'</span>,<span class="attr">info</span>: <span class="string">'登录失败'</span>&#125;);</div><div class="line">                &#125;<span class="keyword">else</span>&#123;</div><div class="line">                	<span class="comment">// 登录成功，跳转页面</span></div><div class="line">                	<span class="keyword">if</span>(result.length==<span class="number">1</span>&amp;&amp;result[<span class="number">0</span>].password==password)&#123;</div><div class="line">                		<span class="comment">// 存放session</span></div><div class="line">                		req.session.user=result[<span class="number">0</span>].account;</div><div class="line">                		<span class="comment">// 由于是ajax提交，需要前端跳转页面。</span></div><div class="line">                		res.send(&#123;<span class="attr">status</span>: <span class="string">'1'</span>,<span class="attr">info</span>: <span class="string">'登录成功'</span>,<span class="attr">href</span>:<span class="string">'/home'</span>&#125;);</div><div class="line">                		<span class="comment">// res.redirect('home');</span></div><div class="line">                	&#125;<span class="keyword">else</span>&#123;</div><div class="line">                		<span class="comment">// 登录失败</span></div><div class="line">                		res.send(&#123;<span class="attr">status</span>: <span class="string">'0'</span>,<span class="attr">info</span>: <span class="string">'用户名或密码错误'</span>&#125;);</div><div class="line">                	&#125;</div><div class="line">                &#125;</div><div class="line">                <span class="comment">// 关闭连接池</span></div><div class="line">                connection.release();</div><div class="line">            &#125;)</div><div class="line">		&#125;</div><div class="line">	&#125;)</div><div class="line">&#125;);</div><div class="line"><span class="built_in">module</span>.exports = router;</div></pre></td></tr></table></figure>
+<p>上面注释页也很清楚。主要是对浏览器发过来的数据做分析处理，然后在查询数据库做检验即可。</p>
+<h2 id="注册路由"><a href="#注册路由" class="headerlink" title="注册路由"></a>注册路由</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>);</div><div class="line"><span class="keyword">var</span> mysql = <span class="built_in">require</span>(<span class="string">'mysql'</span>);</div><div class="line"><span class="keyword">var</span> $conf = <span class="built_in">require</span>(<span class="string">'../conf/mysql'</span>);</div><div class="line"><span class="keyword">var</span> router = express.Router();</div><div class="line"></div><div class="line"><span class="keyword">var</span> pool=mysql.createPool($conf.mysql);</div><div class="line">router.get(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res, next</span>) </span>&#123;</div><div class="line">    <span class="comment">// 判断是否登录</span></div><div class="line">    <span class="keyword">if</span>(req.session.user)&#123;</div><div class="line">        res.render(<span class="string">'home'</span>,&#123;<span class="attr">user</span>:req.session.user&#125;);</div><div class="line">    &#125;<span class="keyword">else</span>&#123;</div><div class="line">        res.render(<span class="string">'register'</span>);</div><div class="line">    &#125;</div><div class="line">&#125;);</div><div class="line"></div><div class="line">router.post(<span class="string">'/'</span>,<span class="function"><span class="keyword">function</span>(<span class="params">req,res</span>)</span>&#123;</div><div class="line">    <span class="keyword">var</span> m=<span class="regexp">/^13[0-9]&#123;9&#125;$|14[0-9]&#123;9&#125;|15[0-9]&#123;9&#125;$|17[0-9]&#123;9&#125;$|18[0-9]&#123;9&#125;$/</span>;</div><div class="line">    <span class="comment">// 获取注册信息</span></div><div class="line">    <span class="comment">// post 用req.body获取参数</span></div><div class="line">    <span class="keyword">var</span> param =req.body;</div><div class="line">    <span class="keyword">var</span> account=param.account;</div><div class="line">    <span class="keyword">var</span> password=param.password;</div><div class="line">    <span class="comment">// 校验账号和密码</span></div><div class="line">    <span class="keyword">if</span>(!m.test(account))&#123;</div><div class="line">        res.send(&#123;<span class="attr">status</span>: <span class="string">'0'</span>,<span class="attr">info</span>: <span class="string">'请输入正确的手机号'</span>&#125;);</div><div class="line">        <span class="keyword">return</span> </div><div class="line">    &#125;;</div><div class="line">    <span class="keyword">if</span>(param.password[<span class="number">0</span>]!=param.password[<span class="number">1</span>])&#123;</div><div class="line">        res.send(&#123;<span class="attr">status</span>: <span class="string">'0'</span>,<span class="attr">info</span>: <span class="string">'俩次输入的密码不一致'</span>&#125;);</div><div class="line">        <span class="keyword">return</span> </div><div class="line">    &#125;;</div><div class="line">    <span class="comment">// 连接数据库</span></div><div class="line">	pool.getConnection(<span class="function"><span class="keyword">function</span>(<span class="params">err,connection</span>)</span>&#123;</div><div class="line">		<span class="keyword">if</span>(err)&#123;</div><div class="line">            res.send(&#123;<span class="attr">status</span>: <span class="string">'0'</span>,<span class="attr">info</span>: <span class="string">'注册失败'</span>&#125;);</div><div class="line">		&#125;<span class="keyword">else</span>&#123;</div><div class="line">            <span class="comment">// 查询账号</span></div><div class="line">            connection.query(<span class="string">'SELECT * FROM user WHERE account = ?'</span>,(account),<span class="function"><span class="keyword">function</span>(<span class="params">err,result</span>)</span>&#123;</div><div class="line">                <span class="keyword">if</span>(err)&#123;</div><div class="line">                    res.send(&#123;<span class="attr">status</span>: <span class="string">'0'</span>,<span class="attr">info</span>: <span class="string">'注册失败'</span>&#125;);</div><div class="line">                &#125;<span class="keyword">else</span>&#123;</div><div class="line">                    <span class="keyword">if</span>(result.length&gt;<span class="number">0</span>)&#123;</div><div class="line">                        res.send(&#123;<span class="attr">status</span>: <span class="string">'0'</span>,<span class="attr">info</span>: <span class="string">'该手机号已被注册'</span>&#125;);</div><div class="line">                    &#125;<span class="keyword">else</span>&#123;</div><div class="line">                        <span class="comment">// 注册成功，插入数据库</span></div><div class="line">                        connection.query(<span class="string">'INSERT INTO user (account,password) VALUES ('</span>+account+<span class="string">','</span>+password[<span class="number">0</span>]+<span class="string">')'</span>,<span class="function"><span class="keyword">function</span>(<span class="params">err,result</span>)</span>&#123;</div><div class="line">                            <span class="keyword">if</span>(err)&#123;</div><div class="line">                                res.send(&#123;<span class="attr">status</span>: <span class="string">'0'</span>,<span class="attr">info</span>: <span class="string">'注册失败'</span>&#125;);</div><div class="line">                            &#125;<span class="keyword">else</span>&#123;</div><div class="line">                                res.send(&#123;<span class="attr">status</span>: <span class="string">'1'</span>,<span class="attr">info</span>: <span class="string">'注册成功'</span>,<span class="attr">href</span>:<span class="string">'/'</span>&#125;);</div><div class="line">                            &#125;</div><div class="line">                        &#125;)</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">                <span class="comment">// 关闭连接池</span></div><div class="line">                connection.release();</div><div class="line">            &#125;)</div><div class="line">		&#125;</div><div class="line">	&#125;)</div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="built_in">module</span>.exports = router;</div></pre></td></tr></table></figure>
+<p>和登录一样，做了对应的数据处理。</p>
+<h2 id="登录后的首页路由"><a href="#登录后的首页路由" class="headerlink" title="登录后的首页路由"></a>登录后的首页路由</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>);</div><div class="line"><span class="keyword">var</span> router = express.Router();</div><div class="line"></div><div class="line">router.get(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res, next</span>) </span>&#123;</div><div class="line">	<span class="comment">// 判断是否已登录</span></div><div class="line">	<span class="keyword">if</span>(!req.session.user)&#123;</div><div class="line">		res.redirect(<span class="string">'/'</span>);</div><div class="line">	&#125;<span class="keyword">else</span>&#123;</div><div class="line">		res.render(<span class="string">'home'</span>,&#123;<span class="attr">user</span>: req.session.user&#125;);</div><div class="line">	&#125;</div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="built_in">module</span>.exports = router;</div></pre></td></tr></table></figure>
+<p>做了一个登录判断，若登录则展示，否则返回登录页面。</p>
+<h2 id="退出路由"><a href="#退出路由" class="headerlink" title="退出路由"></a>退出路由</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>);</div><div class="line"><span class="keyword">var</span> router = express.Router();</div><div class="line"></div><div class="line">router.get(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res, next</span>) </span>&#123;</div><div class="line">	<span class="comment">// 退出，清除session,返回登录页。</span></div><div class="line">	req.session.user=<span class="literal">null</span>;</div><div class="line">  	res.redirect(<span class="string">'/'</span>);</div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="built_in">module</span>.exports = router;</div></pre></td></tr></table></figure>
+<p>退出很简单，直接清除session即可。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Express/" rel="tag">#Express</a>
+          
+            <a href="/tags/Node-js/" rel="tag">#Node.js</a>
+          
+            <a href="/tags/Mysql/" rel="tag">#Mysql</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/12/04/canvas1/" rel="next" title="太空保龄球">
+                <i class="fa fa-chevron-left"></i> 太空保龄球
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/12/25/login/"
+           data-title="Express+Mysql实现简单的登录注册功能" data-url="https://hphelloworld.github.io/2016/12/25/login/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="HuangPan" />
+          <p class="site-author-name" itemprop="name">HuangPan</p>
+          <p class="site-description motion-element" itemprop="description">所见 所学 所得</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">9</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#登录页"><span class="nav-number">1.</span> <span class="nav-text">登录页</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注册页"><span class="nav-number">2.</span> <span class="nav-text">注册页</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#登录后的首页"><span class="nav-number">3.</span> <span class="nav-text">登录后的首页</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#登录路由"><span class="nav-number">4.</span> <span class="nav-text">登录路由</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注册路由"><span class="nav-number">5.</span> <span class="nav-text">注册路由</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#登录后的首页路由"><span class="nav-number">6.</span> <span class="nav-text">登录后的首页路由</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#退出路由"><span class="nav-number">7.</span> <span class="nav-text">退出路由</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">HuangPan</span>
+</div>
+
+<!-- 
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+-->
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"hphelloworld"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
