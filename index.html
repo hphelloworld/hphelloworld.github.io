@@ -238,6 +238,108 @@
             
               
                 
+                <a class="post-title-link" href="/2017/03/12/dataBind/" itemprop="url">
+                  动态数据绑定
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-03-12T22:19:32+08:00" content="2017-03-12">
+              2017-03-12
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/03/12/dataBind/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/12/dataBind/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>目前前端主流框架大部分以MVC或者MVVM为主，jquery的时代也一去不复返，但其也是不可或缺的一部分，至少目前不会被马上替代掉，这需要一个漫长的过渡期。<br>而MVC和MVVM的主要一个思想就是动态数据的绑定更新，今天就参考vue写了一个小的案例，代码如下：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">title</span>&gt;</span>动态数据绑定<span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span> /&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"</span> /&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span>&gt;</span><span class="javascript"></span></div><div class="line"><span class="keyword">let</span> o=Observer.prototype;</div><div class="line"></div><div class="line">o.watch=<span class="function"><span class="keyword">function</span>(<span class="params">obj</span>)</span>&#123;</div><div class="line">	<span class="keyword">let</span> val;</div><div class="line">	<span class="comment">// 遍历对象各个属性为其绑定getter和setter</span></div><div class="line">	<span class="keyword">for</span>(<span class="keyword">let</span> key <span class="keyword">in</span> obj)&#123;</div><div class="line">		<span class="comment">// for...in会把对象原型链上所有可枚举的属性循环出来，hasOwnProperty会筛选出对象本身拥有的属性</span></div><div class="line">		<span class="keyword">if</span>(obj.hasOwnProperty(key))&#123;</div><div class="line">			val=obj[key];</div><div class="line">			<span class="comment">// 判断是否为对象</span></div><div class="line">			<span class="keyword">if</span>(<span class="keyword">typeof</span> val===<span class="string">'object'</span>)&#123;</div><div class="line">				<span class="keyword">new</span> Observer(val);</div><div class="line">			&#125;</div><div class="line">			<span class="keyword">this</span>.convert(key,val);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">o.convert=<span class="function"><span class="keyword">function</span>(<span class="params">key,val</span>)</span>&#123;</div><div class="line">	<span class="comment">// 使用Object.defineProperty重新定义get和set方法</span></div><div class="line">	<span class="built_in">Object</span>.defineProperty(<span class="keyword">this</span>.data,key,&#123;</div><div class="line">		<span class="attr">enumerable</span>: <span class="literal">true</span>,</div><div class="line">		<span class="attr">configurable</span>: <span class="literal">true</span>,</div><div class="line">		<span class="attr">get</span>: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">			<span class="keyword">if</span>(<span class="keyword">typeof</span> val===<span class="string">'object'</span>) <span class="keyword">return</span> val;</div><div class="line">			<span class="built_in">console</span>.log(<span class="string">'你访问了'</span>+key);</div><div class="line">			<span class="keyword">return</span> val</div><div class="line">		&#125;,</div><div class="line">		<span class="attr">set</span>: <span class="function"><span class="keyword">function</span>(<span class="params">newval</span>)</span>&#123;</div><div class="line">			<span class="keyword">if</span>(newval===val) <span class="keyword">return</span>;</div><div class="line">			<span class="built_in">console</span>.log(<span class="string">'你设置了'</span>+key+<span class="string">'为'</span>+<span class="built_in">JSON</span>.stringify(newval));</div><div class="line">			val=newval;</div><div class="line">			<span class="keyword">if</span>(<span class="keyword">typeof</span> newval===<span class="string">'object'</span>)&#123;</div><div class="line">				<span class="keyword">new</span> Observer(newval);</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;)</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">let</span> data = &#123;</div><div class="line">    <span class="attr">user</span>: &#123;</div><div class="line">        <span class="attr">name</span>: <span class="string">"hp"</span>,</div><div class="line">        <span class="attr">age</span>: <span class="string">"24"</span>,</div><div class="line">        <span class="attr">gender</span>: <span class="string">"man"</span></div><div class="line">    &#125;,</div><div class="line">    <span class="attr">book</span>: <span class="string">''</span> </div><div class="line">&#125;;</div><div class="line"><span class="keyword">let</span> app = <span class="keyword">new</span> Observer(data);</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Observer</span>(<span class="params">data</span>)</span>&#123;</div><div class="line">	<span class="keyword">this</span>.data=data;</div><div class="line">	<span class="keyword">this</span>.watch(data);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 测试</span></div><div class="line">data.user.age; <span class="comment">//你访问了age</span></div><div class="line">data.user.name=<span class="string">'30'</span>; <span class="comment">//你设置了name为30</span></div><div class="line">data.user.gender;<span class="comment">// 你访问了gender</span></div><div class="line">data.book=&#123;           <span class="comment">//你设置了book为&#123;"js":"javascript","css":"css3","html":"html5"&#125;</span></div><div class="line">	js: <span class="string">'javascript'</span>,</div><div class="line">	<span class="attr">css</span>: <span class="string">'css3'</span>,</div><div class="line">	<span class="attr">html</span>: <span class="string">'html5'</span></div><div class="line">&#125;</div><div class="line">data.book.js=<span class="string">'es6'</span> <span class="comment">//你设置了js为"es6"</span></div><div class="line"></div><div class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2017/02/14/vue-cli/" itemprop="url">
                   vue-cli多页面配置扩展
                 </a>
@@ -1453,210 +1555,13 @@ this is b.ejs
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/09/25/markdown/" itemprop="url">
-                  Markdown:Basics（快速入门）
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-25T23:01:45+08:00" content="2016-09-25">
-              2016-09-25
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/09/25/markdown/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/25/markdown/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>此处提供了Markdown的简单概念，并提供了一些范例，并且每个范例都会提供输出的HTML结果。</p>
-<p>其实直接试试看也是一个很不错的方法， Dingus 是一个网页应用程序，你可以把自已编写的 Markdown 文档转成 XHTML。</p>
-<h2 id="段落、标题、区块代码"><a href="#段落、标题、区块代码" class="headerlink" title="段落、标题、区块代码"></a>段落、标题、区块代码</h2><p>一个段落是由一个以上的连接的行句组成，而一个以上的空行则会划分出不同的段落（空行的定义是显示上看起来像是空行，就被视为空行，例如有一行只有空白和 tab，那该行也会被视为空行），一般的段落不需要用空白或换行缩进。</p>
-<p>Markdown 支持两种标题的语法，Setext 和 atx 形式。Setext 形式是用底线的形式，利用 = （最高阶标题）和 - （第二阶标题），Atx 形式在行首插入 1 到 6 个 # ，对应到标题 1 到 6 阶。</p>
-<p>区块引用则使用 email 形式的 ‘&gt;’ 角括号。</p>
-<p>Markdown 语法:</p>
-<pre><code>A First Level Header
-====================
-A Second Level Header
----------------------
-
-Now is the time for all good men to come to
-the aid of their country. This is just a
-regular paragraph.
-
-The quick brown fox jumped over the lazy
-dog&apos;s back.
-### Header 3
-
-&gt; This is a blockquote.
-&gt; 
-&gt; This is the second paragraph in the blockquote.
-&gt;
-&gt; ## This is an H2 in a blockquote
-</code></pre><p>输出 HTML 为：<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>A First Level Header<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">h2</span>&gt;</span>A Second Level Header<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>Now is the time for all good men to come to</div><div class="line">the aid of their country. This is just a</div><div class="line">regular paragraph.<span class="tag">&lt;/<span class="name">p</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>The quick brown fox jumped over the lazy</div><div class="line">dog's back.<span class="tag">&lt;/<span class="name">p</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">h3</span>&gt;</span>Header 3<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">blockquote</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>This is a blockquote.<span class="tag">&lt;/<span class="name">p</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>This is the second paragraph in the blockquote.<span class="tag">&lt;/<span class="name">p</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">h2</span>&gt;</span>This is an H2 in a blockquote<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">blockquote</span>&gt;</span></div></pre></td></tr></table></figure></p>
-<h2 id="修辞和强调"><a href="#修辞和强调" class="headerlink" title="修辞和强调"></a>修辞和强调</h2><p>Markdown 使用星号和底线来标记需要强调的区段。</p>
-<p>Markdown 语法:</p>
-<pre><code>Some of these words *are emphasized*.
-Some of these words _are emphasized also_.
-Use two asterisks for **strong emphasis**.
-Or, if you prefer, __use two underscores instead__.
-</code></pre><p>输出 HTML 为:<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>Some of these words <span class="tag">&lt;<span class="name">em</span>&gt;</span>are emphasized<span class="tag">&lt;/<span class="name">em</span>&gt;</span>.</div><div class="line">Some of these words <span class="tag">&lt;<span class="name">em</span>&gt;</span>are emphasized also<span class="tag">&lt;/<span class="name">em</span>&gt;</span>.<span class="tag">&lt;/<span class="name">p</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>Use two asterisks for <span class="tag">&lt;<span class="name">strong</span>&gt;</span>strong emphasis<span class="tag">&lt;/<span class="name">strong</span>&gt;</span>.</div><div class="line">Or, if you prefer, <span class="tag">&lt;<span class="name">strong</span>&gt;</span>use two underscores instead<span class="tag">&lt;/<span class="name">strong</span>&gt;</span>.<span class="tag">&lt;/<span class="name">p</span>&gt;</span></div></pre></td></tr></table></figure></p>
-<h2 id="列表"><a href="#列表" class="headerlink" title="列表"></a>列表</h2><p>无序列表使用星号、加号和减号来做为列表的项目标记，这些符号是都可以使用的，使用星号：</p>
-<pre><code>* Candy.
-* Gum.
-* Booze.
-</code></pre><p>加号：    </p>
-<pre><code>+ Candy.    
-+ Gum.
-+ Booze.
-</code></pre><p>和减号</p>
-<pre><code>- Candy.
-- Gum.
-- Booze.
-</code></pre><p>都会输出 HTML 为：<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">li</span>&gt;</span>Candy.<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">li</span>&gt;</span>Gum.<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">li</span>&gt;</span>Booze.<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></div></pre></td></tr></table></figure></p>
-<p>有序的列表则是使用一般的数字接着一个英文句点作为项目标记：</p>
-<pre><code>1. Red
-2. Green
-3. Blue
-</code></pre><p>输出 HTML 为：<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">ol</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">li</span>&gt;</span>Red<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">li</span>&gt;</span>Green<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">li</span>&gt;</span>Blue<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">ol</span>&gt;</span></div></pre></td></tr></table></figure></p>
-<p>如果你在项目之间插入空行，那项目的内容会用&lt;p&gt;包起来，你也可以在一个项目内放上多个段落，只要在它前面缩排 4 个空白或 1 个 tab 。</p>
-<pre><code>* A list item.
-With multiple paragraphs.
-
-* Another item in the list.
-</code></pre><p>输出 HTML 为：<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">li</span>&gt;</span><span class="tag">&lt;<span class="name">p</span>&gt;</span>A list item.<span class="tag">&lt;/<span class="name">p</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>With multiple paragraphs.<span class="tag">&lt;/<span class="name">p</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">li</span>&gt;</span><span class="tag">&lt;<span class="name">p</span>&gt;</span>Another item in the list.<span class="tag">&lt;/<span class="name">p</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></div></pre></td></tr></table></figure></p>
-<h2 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h2><p>Markdown 支援两种形式的链接语法： 行内 和 参考 两种形式，两种都是使用角括号来把文字转成连结。</p>
-<p>行内形式是直接在后面用括号直接接上链接：</p>
-<pre><code>This is an [example link](http://example.com/).
-</code></pre><p>输出 HTML 为：<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>This is an <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"http://example.com/"</span>&gt;</span></div><div class="line">example link<span class="tag">&lt;/<span class="name">a</span>&gt;</span>.<span class="tag">&lt;/<span class="name">p</span>&gt;</span></div></pre></td></tr></table></figure></p>
-<p>你也可以选择性的加上 title 属性：</p>
-<pre><code>This is an [example link](http://example.com/ &quot;With a Title&quot;).
-</code></pre><p>输出 HTML 为：<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>This is an <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"http://example.com/"</span> <span class="attr">title</span>=<span class="string">"With a Title"</span>&gt;</span></div><div class="line">example link<span class="tag">&lt;/<span class="name">a</span>&gt;</span>.<span class="tag">&lt;/<span class="name">p</span>&gt;</span></div></pre></td></tr></table></figure></p>
-<p>参考形式的链接让你可以为链接定一个名称，之后你可以在文件的其他地方定义该链接的内容：</p>
-<pre><code>I get 10 times more traffic from [Google][1] than from
-[Yahoo][2] or [MSN][3].
-
-[1]: http://google.com/ &quot;Google&quot;
-[2]: http://search.yahoo.com/ &quot;Yahoo Search&quot;
-[3]: http://search.msn.com/ &quot;MSN Search&quot;
-</code></pre><p>输出 HTML 为：<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>I get 10 times more traffic from <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"http://google.com/"</span></span></div><div class="line"><span class="attr">title</span>=<span class="string">"Google"</span>&gt;Google<span class="tag">&lt;/<span class="name">a</span>&gt;</span> than from <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"http://search.yahoo.com/"</span></span></div><div class="line"><span class="attr">title</span>=<span class="string">"Yahoo Search"</span>&gt;Yahoo<span class="tag">&lt;/<span class="name">a</span>&gt;</span> or <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"http://search.msn.com/"</span></span></div><div class="line"><span class="attr">title</span>=<span class="string">"MSN Search"</span>&gt;MSN<span class="tag">&lt;/<span class="name">a</span>&gt;</span>.<span class="tag">&lt;/<span class="name">p</span>&gt;</span></div></pre></td></tr></table></figure></p>
-<p>title 属性是选择性的，链接名称可以用字母、数字和空格，但是不分大小写：</p>
-<pre><code>I start my morning with a cup of coffee and
-[The New York Times][NY Times].
-
-[ny times]: http://www.nytimes.com/
-</code></pre><p>输出 HTML 为：<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>I start my morning with a cup of coffee and</div><div class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"http://www.nytimes.com/"</span>&gt;</span>The New York Times<span class="tag">&lt;/<span class="name">a</span>&gt;</span>.<span class="tag">&lt;/<span class="name">p</span>&gt;</span></div></pre></td></tr></table></figure></p>
-<h2 id="图片"><a href="#图片" class="headerlink" title="图片"></a>图片</h2><p>图片的语法和链接很像。</p>
-<p>行内形式（title 是选择性的）：</p>
-<pre><code>![alt text](/path/to/img.jpg &quot;Title&quot;)
-</code></pre><p>参考形式：</p>
-<pre><code>![alt text][id]
-
-[id]: /path/to/img.jpg &quot;Title&quot;
-</code></pre><p>上面两种方法都会输出 HTML 为：<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">"/path/to/img.jpg"</span> <span class="attr">alt</span>=<span class="string">"alt text"</span> <span class="attr">title</span>=<span class="string">"Title"</span> /&gt;</span></div></pre></td></tr></table></figure></p>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p>在一般的段落文字中，你可以使用反引号 ` 来标记代码区段，区段内的 &amp;、&lt; 和 &gt; 都会被自动的转换成 HTML 实体，这项特性让你可以很容易的在代码区段内插入 HTML 码：</p>
-<pre><code>I strongly recommend against using any `&lt;blink&gt;` tags.
-
-I wish SmartyPants used named entities like `&amp;mdash;`
-instead of decimal-encoded entites like `&amp;#8212;`.
-</code></pre><p>输出 HTML 为：<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>I strongly recommend against using any</div><div class="line"><span class="tag">&lt;<span class="name">code</span>&gt;</span>&amp;lt;blink&amp;gt;<span class="tag">&lt;/<span class="name">code</span>&gt;</span> tags.<span class="tag">&lt;/<span class="name">p</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>I wish SmartyPants used named entities like</div><div class="line"><span class="tag">&lt;<span class="name">code</span>&gt;</span>&amp;amp;mdash;<span class="tag">&lt;/<span class="name">code</span>&gt;</span> instead of decimal-encoded</div><div class="line">entites like <span class="tag">&lt;<span class="name">code</span>&gt;</span>&amp;amp;#8212;<span class="tag">&lt;/<span class="name">code</span>&gt;</span>.<span class="tag">&lt;/<span class="name">p</span>&gt;</span></div></pre></td></tr></table></figure></p>
-<p>如果要建立一个已经格式化好的代码区块，只要每行都缩进 4 个空格或是一个 tab 就可以了，而 &amp;、&lt; 和 &gt; 也一样会自动转成 HTML 实体。</p>
-<p>Markdown 语法:</p>
-<pre><code>If you want your page to validate under XHTML 1.0 Strict,
-you&apos;ve got to put paragraph tags in your blockquotes:
-
-&lt;blockquote&gt;
-&lt;p&gt;For example.&lt;/p&gt;
-&lt;/blockquote&gt;
-</code></pre><p>输出 HTML 为：<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>If you want your page to validate under XHTML 1.0 Strict,</div><div class="line">you've got to put paragraph tags in your blockquotes:<span class="tag">&lt;/<span class="name">p</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">pre</span>&gt;</span><span class="tag">&lt;<span class="name">code</span>&gt;</span>&amp;lt;blockquote&amp;gt;</div><div class="line">&amp;lt;p&amp;gt;For example.&amp;lt;/p&amp;gt;</div><div class="line">&amp;lt;/blockquote&amp;gt;</div><div class="line"><span class="tag">&lt;/<span class="name">code</span>&gt;</span><span class="tag">&lt;/<span class="name">pre</span>&gt;</span></div></pre></td></tr></table></figure></p>
-<p>以上即为一些基本的入门技巧，若有进一步的需求可参考<a href="http://www.appinn.com/markdown/index.html" target="_blank" rel="external">详细的文档</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+  </nav>
+
 
 
           </div>
@@ -1695,7 +1600,7 @@ you&apos;ve got to put paragraph tags in your blockquotes:
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">10</span>
+              <span class="site-state-item-count">11</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1705,7 +1610,7 @@ you&apos;ve got to put paragraph tags in your blockquotes:
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-count">13</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
