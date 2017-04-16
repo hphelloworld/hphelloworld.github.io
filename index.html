@@ -238,6 +238,107 @@
             
               
                 
+                <a class="post-title-link" href="/2017/04/16/vue/" itemprop="url">
+                  一个简单的VUE模版方法
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-04-16T21:44:08+08:00" content="2017-04-16">
+              2017-04-16
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/04/16/vue/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/04/16/vue/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>依照VUE的插值模版语法，实现了一个类似的数据与视图绑定的方法。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>动态数据绑定VUE<span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span> /&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"</span> /&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="undefined"></span></div><div class="line"></div><div class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"app"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">div</span>&gt;</span>&#123;&#123;user.name&#125;&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">div</span>&gt;</span>&#123;&#123;user.age&#125;&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span>&gt;</span><span class="javascript"></span></div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">Vue</span>(<span class="params">obj</span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> data = obj.data;</div><div class="line">        <span class="keyword">this</span>.data = data;</div><div class="line">        <span class="keyword">this</span>.el = obj.el;</div><div class="line">        <span class="keyword">this</span>.update();</div><div class="line">        watch(data);</div><div class="line">        <span class="keyword">var</span> _this = <span class="keyword">this</span>;</div><div class="line">        <span class="comment">// 为对象添加监控</span></div><div class="line">        <span class="function"><span class="keyword">function</span> <span class="title">watch</span>(<span class="params">data</span>) </span>&#123;</div><div class="line">            <span class="comment">// 循环绑定get与set方法</span></div><div class="line">            <span class="keyword">for</span> (<span class="keyword">var</span> key <span class="keyword">in</span> data) &#123;</div><div class="line">                <span class="keyword">if</span> (data.hasOwnProperty(key)) &#123;</div><div class="line">                    <span class="keyword">var</span> val = data[key];</div><div class="line">                    <span class="comment">// 判断是否为对象</span></div><div class="line">                    <span class="keyword">if</span> (<span class="keyword">typeof</span> val === <span class="string">'object'</span>) &#123;</div><div class="line">                        <span class="keyword">new</span> watch(val);</div><div class="line">                    &#125; <span class="keyword">else</span> &#123;</div><div class="line">                        bind(key, val);</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            <span class="comment">// 更改set与get;</span></div><div class="line">            <span class="function"><span class="keyword">function</span> <span class="title">bind</span>(<span class="params">key, val</span>) </span>&#123;</div><div class="line">                <span class="built_in">Object</span>.defineProperty(data, key, &#123;</div><div class="line">                    <span class="attr">enumerable</span>: <span class="literal">true</span>,</div><div class="line">                    <span class="attr">configurable</span>: <span class="literal">true</span>,</div><div class="line">                    <span class="attr">get</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">                        <span class="keyword">return</span> val;</div><div class="line">                    &#125;,</div><div class="line">                    <span class="attr">set</span>: <span class="function"><span class="keyword">function</span> (<span class="params">newval</span>) </span>&#123;</div><div class="line">                        <span class="keyword">if</span> (newval === data[key]) <span class="keyword">return</span>;</div><div class="line">                        val = newval;</div><div class="line">                        <span class="comment">// 有值变化，更新dom</span></div><div class="line">                        _this.update();</div><div class="line">                    &#125;</div><div class="line">                &#125;)</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line">    <span class="comment">// dom更新操作</span></div><div class="line">    Vue.prototype.update = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> _this = <span class="keyword">this</span>;</div><div class="line">        <span class="keyword">var</span> data = _this.data;</div><div class="line">        <span class="keyword">var</span> el = <span class="built_in">document</span>.querySelector(_this.el);</div><div class="line">        <span class="keyword">var</span> _html = el.innerHTML.replace(<span class="regexp">/\&#123;\&#123;(.*)\&#125;\&#125;/g</span>, mark);</div><div class="line">        el.innerHTML = _html;</div><div class="line">        <span class="comment">// 模版差值替换</span></div><div class="line">        <span class="function"><span class="keyword">function</span> <span class="title">mark</span>(<span class="params">match, key</span>) </span>&#123;</div><div class="line">            <span class="keyword">return</span> <span class="string">'&lt;vue data-bind-text="'</span> + key + <span class="string">'"&gt;&lt;/vue&gt;'</span></div><div class="line">        &#125;;</div><div class="line">        <span class="comment">// 找到所有需要替换的值</span></div><div class="line">        <span class="keyword">var</span> els = <span class="built_in">document</span>.querySelectorAll(<span class="string">"[data-bind-text]"</span>);</div><div class="line">        [].forEach.call(els, <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</div><div class="line">            <span class="keyword">var</span> attr = e.getAttribute(<span class="string">'data-bind-text'</span>)</div><div class="line">            <span class="keyword">var</span> attr_array = attr.split(<span class="string">'.'</span>);</div><div class="line">            <span class="comment">// 找到data里面对应的键值</span></div><div class="line">            <span class="keyword">var</span> v = data[attr_array[<span class="number">0</span>]];</div><div class="line">            <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">1</span>, l = attr_array.length; i &lt; l; i++) &#123;</div><div class="line">                v = v[attr_array[i]];</div><div class="line">            &#125;</div><div class="line">            <span class="comment">// 判断是否第一次渲染</span></div><div class="line">            <span class="keyword">if</span> (e.nodeName == <span class="string">"VUE"</span>) &#123;</div><div class="line">                <span class="keyword">var</span> p = e.parentNode;</div><div class="line">                p.setAttribute(<span class="string">"data-bind-text"</span>, attr);</div><div class="line">                p.innerHTML = p.innerHTML.replace(e.outerHTML, v);</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                e.innerHTML = v;</div><div class="line">            &#125;</div><div class="line">        &#125;)</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// 测试实例</span></div><div class="line">    <span class="keyword">var</span> app = <span class="keyword">new</span> Vue(&#123;</div><div class="line">        <span class="attr">el</span>: <span class="string">"#app"</span>,</div><div class="line">        <span class="attr">data</span>: &#123;</div><div class="line">            <span class="attr">user</span>: &#123;</div><div class="line">                <span class="attr">name</span>: <span class="string">'huangpan'</span>,</div><div class="line">                <span class="attr">age</span>: <span class="number">23</span></div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line">    <span class="comment">// 测试设置延迟更新数据</span></div><div class="line">    setTimeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">        app.data.user.name = <span class="string">'hh'</span>;</div><div class="line">    &#125;, <span class="number">2000</span>);</div><div class="line"></div><div class="line">    <span class="comment">// 测试设置延迟更新数据</span></div><div class="line">    setTimeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">        app.data.user.age = <span class="string">'18'</span>;</div><div class="line">    &#125;, <span class="number">5000</span>);</div><div class="line"></div><div class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2017/03/12/dataBind/" itemprop="url">
                   动态数据绑定
                 </a>
@@ -1350,211 +1451,6 @@ this is b.ejs
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-tags " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/10/02/hexo/" itemprop="url">
-                  Hexo发布部署指令
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-10-02T21:29:09+08:00" content="2016-10-02">
-              2016-10-02
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/10/02/hexo/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/02/hexo/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="指令"><a href="#指令" class="headerlink" title="指令"></a>指令</h1><h2 id="init"><a href="#init" class="headerlink" title="init"></a>init</h2><pre><code>$ hexo init [folder]
-</code></pre><p>新建一个网站。如果没有设置 folder ，Hexo 默认在目前的文件夹建立网站。</p>
-<h2 id="new"><a href="#new" class="headerlink" title="new"></a>new</h2><pre><code>$ hexo new [layout] &lt;title&gt;
-</code></pre><p>新建一篇文章。如果没有设置 layout 的话，默认使用 _config.yml 中的 default_layout 参数代替。如果标题包含空格的话，请使用引号括起来。</p>
-<h2 id="generate"><a href="#generate" class="headerlink" title="generate"></a>generate</h2><pre><code>$ hexo generate
-</code></pre><p>生成静态文件。</p>
-<table>
-<thead>
-<tr>
-<th>选项</th>
-<th style="text-align:center">描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>-d, –deploy</td>
-<td style="text-align:center">文件生成后立即部署网站</td>
-</tr>
-<tr>
-<td>-w, –watch</td>
-<td style="text-align:center">监视文件变动</td>
-</tr>
-</tbody>
-</table>
-<h2 id="publish"><a href="#publish" class="headerlink" title="publish"></a>publish</h2><pre><code>$ hexo publish [layout] &lt;filename&gt;
-</code></pre><p>发表草稿。</p>
-<h2 id="server"><a href="#server" class="headerlink" title="server"></a>server</h2><pre><code>$ hexo server
-</code></pre><p>启动服务器。默认情况下，访问网址为： <a href="http://localhost:4000/。" target="_blank" rel="external">http://localhost:4000/。</a></p>
-<table>
-<thead>
-<tr>
-<th>选项</th>
-<th style="text-align:center">描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>-p, –port</td>
-<td style="text-align:center">重设端口</td>
-</tr>
-<tr>
-<td>-s, –static</td>
-<td style="text-align:center">只使用静态文件</td>
-</tr>
-<tr>
-<td>-l, –log</td>
-<td style="text-align:center">启动日记记录，使用覆盖记录格式</td>
-</tr>
-</tbody>
-</table>
-<h2 id="deploy"><a href="#deploy" class="headerlink" title="deploy"></a>deploy</h2><pre><code>$ hexo deploy
-</code></pre><p>部署网站。</p>
-<table>
-<thead>
-<tr>
-<th>参数</th>
-<th style="text-align:center">描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>-g, –generate</td>
-<td style="text-align:center">部署之前预先生成静态文件</td>
-</tr>
-</tbody>
-</table>
-<h2 id="render"><a href="#render" class="headerlink" title="render"></a>render</h2><pre><code>$ hexo render &lt;file1&gt; [file2] ...
-</code></pre><p>渲染文件。</p>
-<table>
-<thead>
-<tr>
-<th>参数</th>
-<th style="text-align:center">描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>-o, –output</td>
-<td style="text-align:center">设置输出路径</td>
-</tr>
-</tbody>
-</table>
-<h2 id="migrate"><a href="#migrate" class="headerlink" title="migrate"></a>migrate</h2><pre><code>$ hexo migrate &lt;type&gt;
-</code></pre><p>从其他博客系统迁移内容。</p>
-<h2 id="clean"><a href="#clean" class="headerlink" title="clean"></a>clean</h2><pre><code>$ hexo clean
-</code></pre><p>清除缓存文件 (db.json) 和已生成的静态文件 (public)。</p>
-<h2 id="list"><a href="#list" class="headerlink" title="list"></a>list</h2><pre><code>$ hexo list &lt;type&gt;
-</code></pre><p>列出网站资料。</p>
-<p>##version</p>
-<pre><code>$ hexo version
-</code></pre><p>显示 Hexo 版本。</p>
-<h2 id="选项"><a href="#选项" class="headerlink" title="选项"></a>选项</h2><h3 id="安全模式"><a href="#安全模式" class="headerlink" title="安全模式"></a>安全模式</h3><pre><code>$ hexo --safe
-</code></pre><p>在安全模式下，不会载入插件和脚本。当您在安装新插件遭遇问题时，可以尝试以安全模式重新执行。</p>
-<h3 id="调试模式"><a href="#调试模式" class="headerlink" title="调试模式"></a>调试模式</h3><pre><code>$ hexo --debug
-</code></pre><p>在终端中显示调试信息并记录到 debug.log。当您碰到问题时，可以尝试用调试模式重新执行一次，并 提交调试信息到 GitHub。</p>
-<h3 id="简洁模式"><a href="#简洁模式" class="headerlink" title="简洁模式"></a>简洁模式</h3><pre><code>$ hexo --silent
-</code></pre><p>隐藏终端信息。</p>
-<p>###自定义配置文件的路径</p>
-<pre><code>$ hexo --config custom.yml
-</code></pre><p>自定义配置文件的路径，执行后将不再使用 _config.yml。</p>
-<h3 id="显示草稿"><a href="#显示草稿" class="headerlink" title="显示草稿"></a>显示草稿</h3><pre><code>$ hexo --draft
-</code></pre><p>显示 source/_drafts 文件夹中的草稿文章。</p>
-<h3 id="自定义-CWD"><a href="#自定义-CWD" class="headerlink" title="自定义 CWD"></a>自定义 CWD</h3><pre><code>$ hexo --cwd /path/to/cwd
-</code></pre><p>自定义当前工作目录（Current working directory）的路径。</p>
-<p>以上即为一些基本常用的指令，如需了解更详细的指令，可访问<a href="https://hexo.io/zh-cn/" target="_blank" rel="external">hexo官网</a>查看详细的API文档</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1600,7 +1496,7 @@ this is b.ejs
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">11</span>
+              <span class="site-state-item-count">12</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
